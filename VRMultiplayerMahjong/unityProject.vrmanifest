@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.vrmultiplayermahjong.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "D:\\Documents\\5th Year\\Spring\\CSCI4950\\VRMahjongMultiplayer\\VRMahjongMultiplayer\\VRMultiplayerMahjong\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "VRMultiplayerMahjong [Testing]"
+        }
+      }
+    }
+  ]
+}
