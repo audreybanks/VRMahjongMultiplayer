@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Realtime;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks {
+
+    private GameObject playerPrefab;
 
     void Start() {
         connectToServer();
@@ -27,8 +29,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnJoinedRoom() {
-        Debug.Log("Joined Room.");
         base.OnJoinedRoom();
+        playerPrefab = PhotonNetwork.Instantiate("NetworkPlayer", transform.position, transform.rotation);
+        Debug.Log("Joined Room.");
+    }
+
+    public override void OnLeftRoom() {
+        base.OnLeftRoom();
+        PhotonNetwork.Destroy(playerPrefab);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
