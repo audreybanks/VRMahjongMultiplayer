@@ -30,7 +30,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
-        playerPrefab = PhotonNetwork.Instantiate("NetworkPlayer", transform.position, transform.rotation);
+        playerPrefab = PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
         Debug.Log("Joined Room.");
     }
 
