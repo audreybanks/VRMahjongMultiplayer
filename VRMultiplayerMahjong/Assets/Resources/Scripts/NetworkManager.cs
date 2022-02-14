@@ -7,6 +7,7 @@ using Photon.Realtime;
 public class NetworkManager : MonoBehaviourPunCallbacks {
 
     private GameObject playerPrefab;
+    public MahjongGameManager gameManager;
 
     void Start() {
         connectToServer();
@@ -31,6 +32,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
         playerPrefab = PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
+        gameManager.buildWall();
         Debug.Log("Joined Room.");
     }
 

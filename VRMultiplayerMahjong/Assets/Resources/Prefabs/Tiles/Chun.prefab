@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 8975238167215534394}
   - component: {fileID: 7435447090905435482}
   - component: {fileID: 5527191025680122004}
+  - component: {fileID: -8557159051427845046}
   m_Layer: 0
   m_Name: Chun
   m_TagString: Untagged
@@ -60,14 +61,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9046774166930392755}
-  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
+  m_LocalRotation: {x: -0.7064895, y: 0, z: 0, w: 0.7077236}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 4020322424553150255}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.9, y: 0, z: 0}
 --- !u!33 &4713177631547085740
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -164,7 +165,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 1
+  OwnershipTransfer: 2
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7435447090905435482}
@@ -302,3 +303,17 @@ MonoBehaviour:
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
   m_AttachPointCompatibilityMode: 0
+--- !u!114 &-8557159051427845046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9046774166930392755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1ccc9873a6eac4cb96a8479573c672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value: 37
+  tileName: Red Dragon

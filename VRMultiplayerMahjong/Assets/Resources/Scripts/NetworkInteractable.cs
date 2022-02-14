@@ -14,6 +14,7 @@ public class NetworkInteractable : XRGrabInteractable {
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
+        Debug.Log("RequestOwnership() called");
         photonView.RequestOwnership();
         base.OnSelectEntered(args);
     }
