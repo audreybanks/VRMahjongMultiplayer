@@ -45,8 +45,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
 
     ///<summary>Instantiates the wall of tiles and adds them to the list of tiles.</summary>
     public void buildWall() {
+        shuffling = true;
         if (PhotonNetwork.IsMasterClient) {
-            shuffling = true;
             shuffleTilePositions();
             Object[] tilePrefabs = Resources.LoadAll("Prefabs/Tiles", typeof(GameObject));
             Object[] tileSpecialPrefabs = Resources.LoadAll("Prefabs/TilesSpecial", typeof(GameObject));
@@ -63,7 +63,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
                     tiles.Add(PhotonNetwork.Instantiate("Prefabs/TilesSpecial/" + tileSpecialPrefabs[(j - 124) % 6].name, tilePositions[j].position, tilePositions[j].rotation));
                 }
             }
-            shuffling = false;
         }
+        shuffling = false;
     }
+    //TODO: Make button to shuffle tiles, only react to master client
 }
