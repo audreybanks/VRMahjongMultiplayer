@@ -4,7 +4,8 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class MahjongGameManager : MonoBehaviourPunCallbacks {
+//TODO: Implement IPunObservable and Instantiate from NetworkManager
+public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback {
 
     private List<GameObject> tiles;
     private List<TransformData> tilePositions;
@@ -30,6 +31,10 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
 
     }
 
+    public void OnPhotonInstantiate(PhotonMessageInfo info) {
+        buildWall();
+    }
+
     ///<summary>Returns true if the tiles are currently being shuffled.</summary>
     public bool isShuffling() {
         return shuffling;
@@ -47,7 +52,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
 
     ///<summary>Instantiates the wall of tiles and adds them to the list of tiles.</summary>
     public void buildWall() {
-        shuffling = true;
+        photonView.RPC("updateShuffleState", RpcTarget.AllBuffered, true);
         if (PhotonNetwork.IsMasterClient) {
             shuffleTilePositions();
             Object[] tilePrefabs = Resources.LoadAll("Prefabs/Tiles", typeof(GameObject));
@@ -66,7 +71,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
                 }
             }
         }
-        shuffling = false;
+        photonView.RPC("updateShuffleState", RpcTarget.AllBuffered, false);
     }
 
     ///<summary>Changes the color of the reset button, used when tiles are being shuffled to turn the button gray.</summary>
@@ -75,11 +80,12 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
         resetButton.GetComponent<Renderer>().material.color = new Color(r, g, b, a);
     }
 
+    ///<summary>Updates the shuffle state for each user</summary>
     [PunRPC]
-    private void moveTiles(TransformData positions) {
-        
-    }
-    
+    private void updateShuffleState(bool state) {
+        shuffling = state;
+    }    
+
     ///<summary>Shuffles and resets the tile positions. Can only be activated by the Master Client.</summary>
     public void resetTiles() {
         shuffling = true;
@@ -96,11 +102,9 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
                 tile.GetComponent<PhotonTransformView>().enabled = false;
             }
             
-            //Have the Master Client shuffle the positions then use a rpc call to have each user move the tile locally(?)
+            //Have the Master Client shuffle the positions and move tiles
             shuffleTilePositions();
             
-            //TODO: Serialize TransformData to use in RPC
-            //photonView.RPC("moveTiles", RpcTarget.All, tilePositions.ToArray());
 
 
             foreach (GameObject tile in tiles) {
