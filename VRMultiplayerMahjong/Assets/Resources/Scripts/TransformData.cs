@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+///<summary>Class to hold the position and rotation of an object</summary>
 public class TransformData {
     private Vector3 _position;
     public Vector3 position {

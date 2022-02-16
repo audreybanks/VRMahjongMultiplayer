@@ -37,9 +37,14 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks {
 
     public void OnOwnershipRequest(PhotonView targetView, Player requestingPlayer) {
         Debug.Log("OnOwnershipRequest() called");
+        Vector3 position = targetView.gameObject.transform.position;
+        Quaternion rotation = targetView.gameObject.transform.rotation;
 
+        //TODO: tiles not picked up by the owner don't go back to their original positions if request denied.
         if (targetView.IsMine && !gameManager.isShuffling()) {
             targetView.TransferOwnership(requestingPlayer);
+        } else if (gameManager.isShuffling()) {
+            Debug.Log(targetView.gameObject.GetComponent<Tile>().tileName + " is being shuffled");
         }
     }
 

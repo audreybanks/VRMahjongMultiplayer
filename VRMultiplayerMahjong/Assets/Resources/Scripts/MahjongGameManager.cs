@@ -10,6 +10,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
     private List<TransformData> tilePositions;
     private bool shuffling;
     public GameObject TilePositions;
+    public GameObject resetButton;
+    private Color previousColor;
 
     // Start is called before the first frame update
     void Start() {
@@ -20,7 +22,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
             tilePositions.Add(new TransformData(tile.gameObject.transform.position, tile.gameObject.transform.rotation));
             Destroy(tile.gameObject);
         }
-        Debug.Log(tilePositions.Count);
+        //Debug.Log(tilePositions.Count);
     }
 
     // Update is called once per frame
@@ -50,8 +52,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
             shuffleTilePositions();
             Object[] tilePrefabs = Resources.LoadAll("Prefabs/Tiles", typeof(GameObject));
             Object[] tileSpecialPrefabs = Resources.LoadAll("Prefabs/TilesSpecial", typeof(GameObject));
-            Debug.Log(tileSpecialPrefabs[0].name);
-            Debug.Log("buildWall() called");
+            // Debug.Log(tileSpecialPrefabs[0].name);
+            // Debug.Log("buildWall() called");
             for (int i = 0; i < 4; i++) {
                 for (int j = (31 * i); j < (31 * i) + 31; j++) {
                     tiles.Add(PhotonNetwork.Instantiate("Prefabs/Tiles/" + tilePrefabs[j % 31].name, tilePositions[j].position, tilePositions[j].rotation));
@@ -66,5 +68,47 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks {
         }
         shuffling = false;
     }
-    //TODO: Make button to shuffle tiles, only react to master client
+
+    ///<summary>Changes the color of the reset button, used when tiles are being shuffled to turn the button gray.</summary>
+    [PunRPC]
+    private void changeButtonColor(float r, float g, float b, float a) {
+        resetButton.GetComponent<Renderer>().material.color = new Color(r, g, b, a);
+    }
+
+    [PunRPC]
+    private void moveTiles(TransformData positions) {
+        
+    }
+    
+    ///<summary>Shuffles and resets the tile positions. Can only be activated by the Master Client.</summary>
+    public void resetTiles() {
+        shuffling = true;
+        Debug.Log("Clicked reset button");
+        Debug.Log("isShuffling: " + shuffling);
+        if (PhotonNetwork.IsMasterClient) {
+            Debug.Log(PhotonNetwork.LocalPlayer.UserId + " is the Master Client");
+            previousColor = resetButton.GetComponent<Renderer>().material.color;
+            photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, 0.5f, 0.5f, 0.5f, 1.0f);
+            
+            //Before shuffling, transfer ownership to the Master Client
+            foreach (GameObject tile in tiles) {
+                tile.GetComponent<PhotonView>().RequestOwnership();
+                tile.GetComponent<PhotonTransformView>().enabled = false;
+            }
+            
+            //Have the Master Client shuffle the positions then use a rpc call to have each user move the tile locally(?)
+            shuffleTilePositions();
+            
+            //TODO: Serialize TransformData to use in RPC
+            //photonView.RPC("moveTiles", RpcTarget.All, tilePositions.ToArray());
+
+
+            foreach (GameObject tile in tiles) {
+                tile.GetComponent<PhotonTransformView>().enabled = true;
+            }
+            
+            photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, previousColor.r, previousColor.g, previousColor.b, 1.0f);
+        }
+        shuffling = false;
+    }
 }
