@@ -66,5 +66,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13a1bc2a68dcb648b98ea8cde513181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TilePositions: {fileID: 0}
-  resetButton: {fileID: 0}
