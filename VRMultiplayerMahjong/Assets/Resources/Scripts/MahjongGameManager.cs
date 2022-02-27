@@ -37,6 +37,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         if (PhotonNetwork.IsMasterClient) {
             resetButton = PhotonNetwork.InstantiateRoomObject("Prefabs/ResetButton", new Vector3(0.620000005f, 1.35000002f, 1.14999998f), Quaternion.identity);
             resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = gameObject.GetComponent<MahjongGameManager>();
+            //After instatiating the reset button as the Master Client, use an rpc to set it for the other clients.
+            photonView.RPC("setResetButton", RpcTarget.AllBuffered, resetButton.name);
         }
         buildWall();
     }
@@ -80,6 +82,14 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         photonView.RPC("updateShuffleState", RpcTarget.AllBuffered, false);
     }
 
+    ///<summary>Sets the reset button for all players besides the Master Client</summary>
+    [PunRPC]
+    private void setResetButton(string resetButtonName) {
+        if (!PhotonNetwork.IsMasterClient) {
+            resetButton = GameObject.Find(resetButtonName);
+        }
+    }
+
     ///<summary>Changes the color of the reset button, used when tiles are being shuffled to turn the button gray.</summary>
     [PunRPC]
     private void changeButtonColor(float r, float g, float b, float a) {
@@ -95,12 +105,6 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
 
     ///<summary>Shuffles and resets the tile positions. Can only be activated by the Master Client.</summary>
     public void resetTiles() {
-        //TODO: set reset button in all clients
-        if (!PhotonNetwork.IsMasterClient) {
-            resetButton = FindObjectOfType<ResetButtonInteractable>().gameObject;
-            resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = gameObject.GetComponent<MahjongGameManager>();
-            Debug.Log("Not Master Client: " + resetButton.name);
-        }
         shuffling = true;
         Debug.Log("Clicked reset button");
         Debug.Log("isShuffling: " + shuffling);
