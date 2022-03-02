@@ -14,8 +14,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     }
 
     private void connectToServer() {
-        PhotonNetwork.ConnectUsingSettings();
         Debug.Log("Connecting...");
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     public override void OnConnectedToMaster() {
@@ -46,6 +46,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnPlayerEnteredRoom(Player newPlayer) {
         Debug.Log("New player has joined.");
         base.OnPlayerEnteredRoom(newPlayer);
+    }
+
+    public override void OnDisconnected(DisconnectCause cause) {
+        Debug.Log("Disconnected.");
+        base.OnDisconnected(cause);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message) {
+        Debug.Log("Could not connect to room.");
+        base.OnJoinRoomFailed(returnCode, message);
     }
 }
 

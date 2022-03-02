@@ -53,7 +53,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         loadAvatar();
     }
 
-    //TODO: Load avatar locally to get rid of stuttering
+    //TODO: Add transform view to head and hands
     private void loadAvatar() {
         if (photonView.IsMine) {
             Debug.Log("Avatar loading...");
