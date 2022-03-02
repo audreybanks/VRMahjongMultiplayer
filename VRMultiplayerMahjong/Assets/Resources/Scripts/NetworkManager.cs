@@ -31,11 +31,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
+        Debug.Log("Joined Room.");
         playerPrefab = PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
         if (PhotonNetwork.IsMasterClient) { //multiple game managers created without this
             gameManager = PhotonNetwork.InstantiateRoomObject("Prefabs/MahjongGameManager", transform.position, transform.rotation);
         }
-        Debug.Log("Joined Room.");
     }
 
     public override void OnLeftRoom() {
