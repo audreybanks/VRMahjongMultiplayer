@@ -28,6 +28,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         shuffling = false;
         tilePositions = new List<TransformData>();
         tiles = new List<GameObject>();
+        //TODO: Fix Find
         TilePositions = GameObject.Find("TilePositions");
         foreach (Tile tile in TilePositions.GetComponentsInChildren<Tile>()) {
             tilePositions.Add(new TransformData(tile.gameObject.transform.position, tile.gameObject.transform.rotation));
@@ -38,7 +39,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
             resetButton = PhotonNetwork.InstantiateRoomObject("Prefabs/ResetButton", new Vector3(0.620000005f, 1.35000002f, 1.14999998f), Quaternion.identity);
             resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = gameObject.GetComponent<MahjongGameManager>();
             //After instatiating the reset button as the Master Client, use an rpc to set it for the other clients.
-            photonView.RPC("setResetButton", RpcTarget.AllBuffered, resetButton.name);
+            photonView.RPC("setResetButton", RpcTarget.AllBuffered, resetButton.GetComponent<PhotonView>().ViewID);
         }
         buildWall();
     }
@@ -84,16 +85,15 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
 
     ///<summary>Sets the reset button for all players besides the Master Client</summary>
     [PunRPC]
-    private void setResetButton(string resetButtonName) {
+    private void setResetButton(int resetButtonID) {
         if (!PhotonNetwork.IsMasterClient) {
-            resetButton = GameObject.Find(resetButtonName);
+            resetButton = PhotonNetwork.GetPhotonView(resetButtonID).gameObject;
         }
     }
 
     ///<summary>Changes the color of the reset button, used when tiles are being shuffled to turn the button gray.</summary>
     [PunRPC]
     private void changeButtonColor(float r, float g, float b, float a) {
-        //TODO: NullReference when not master client
         resetButton.GetComponent<Renderer>().material.color = new Color(r, g, b, a);
     }
 
@@ -109,7 +109,6 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         Debug.Log("Clicked reset button");
         Debug.Log("isShuffling: " + shuffling);
         if (PhotonNetwork.IsMasterClient) {
-            Debug.Log(PhotonNetwork.LocalPlayer.UserId + " is the Master Client");
             previousColor = resetButton.GetComponent<Renderer>().material.color;
             photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, 0.5f, 0.5f, 0.5f, 1.0f);
 
@@ -121,7 +120,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
 
             //Have the Master Client shuffle the positions and move tiles
             shuffleTilePositions();
-            //TODO: Move tiles
+
             for (int i = 0; i < tilePositions.Count; i++) {
                 tiles[i].transform.position = tilePositions[i].position;
                 tiles[i].transform.rotation = tilePositions[i].rotation;
