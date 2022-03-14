@@ -9831,10 +9831,26 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 273001709}
+    - target: {fileID: 4227633746019924268, guid: d0214c154c15e9043a820230744e1eab, type: 3}
+      propertyPath: m_HapticHoverEnterDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4227633746019924268, guid: d0214c154c15e9043a820230744e1eab, type: 3}
+      propertyPath: m_HapticHoverEnterIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4227633746612499210, guid: d0214c154c15e9043a820230744e1eab, type: 3}
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 273001709}
+    - target: {fileID: 4227633746612499210, guid: d0214c154c15e9043a820230744e1eab, type: 3}
+      propertyPath: m_HapticHoverEnterDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4227633746612499210, guid: d0214c154c15e9043a820230744e1eab, type: 3}
+      propertyPath: m_HapticHoverEnterIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0214c154c15e9043a820230744e1eab, type: 3}
 --- !u!1001 &6363661110805989156

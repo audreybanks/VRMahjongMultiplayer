@@ -21,16 +21,21 @@ public class NetworkInteractable : XRGrabInteractable {
         base.OnSelectEntered(args);
     }
 
-    //TODO: Have tiles highlight when hovered over
+    //tiles highlight when hovered over
     protected override void OnHoverEntered(HoverEnterEventArgs args) {
-        Debug.Log(gameObject.GetComponent<Tile>().name + " is being hovered over");
+        //Debug.Log(gameObject.GetComponent<Tile>().name + " is being hovered over");
         foreach (Material mat in tileMats) {
-            mat.SetColor("_EmissiveColor", mat.GetColor("_Color") * 1);
+            Debug.Log(mat.GetColor("_Color").ToString());
+            mat.SetColor("_Color", mat.GetColor("_Color") + new Color(0.3f, 0.3f, 0.3f, 1.0f));
         }
         base.OnHoverEntered(args);
     }
 
     protected override void OnHoverExited(HoverExitEventArgs args) {
+        foreach (Material mat in tileMats) {
+            Debug.Log(mat.GetColor("_Color").ToString());
+            mat.SetColor("_Color", mat.GetColor("_Color") - new Color(0.3f, 0.3f, 0.3f, 1.0f));
+        }
         base.OnHoverExited(args);
     }
 }
