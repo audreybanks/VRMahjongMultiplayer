@@ -43,7 +43,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     void Update() {
         //If avatar isn't loaded yet, don't sync 
         if (photonView.IsMine && avatar != null) {
-            head.SetPositionAndRotation(headDevice.position + new Vector3(0, -(eyes.position.y - head.position.y), -0.075f), headDevice.rotation);
+            head.SetPositionAndRotation(headDevice.position + new Vector3(0, -(eyes.position.y - head.position.y), 0), headDevice.rotation);
             leftHand.SetPositionAndRotation(leftHandDevice.position, leftHandDevice.rotation);
             rightHand.SetPositionAndRotation(rightHandDevice.position, rightHandDevice.rotation);
         }
