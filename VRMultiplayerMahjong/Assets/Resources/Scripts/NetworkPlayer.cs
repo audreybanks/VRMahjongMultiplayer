@@ -9,10 +9,11 @@ using Photon.Realtime;
 using Wolf3D.ReadyPlayerMe.AvatarSDK;
 
 public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, IPunInstantiateMagicCallback {
+
+    public Vector3 headBodyOffset;
     private Transform head;
     private Transform leftHand;
     private Transform rightHand;
-    private Transform eyes;
 
     private Transform headDevice;
     private Transform leftHandDevice;
@@ -20,12 +21,43 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
     public string avatarURL;
     private GameObject avatar;
+    private GameObject hips;
+    private GameObject leftHandMesh;
+    private GameObject rightHandMesh;
 
     private MahjongGameManager gameManager;
+
+    [SerializeField] private MapTransforms headMapping;
+    [SerializeField] private MapTransforms leftHandMapping;
+    [SerializeField] private MapTransforms rightHandMapping;
+
+
+    //<summary>Class to map the network Transform and the device Transform</summary>
+    [System.Serializable]
+    private class MapTransforms {
+        public Transform deviceTransform;
+        public Transform networkTransform;
+
+        public Vector3 positionOffset;
+        public Vector3 rotationOffset;
+
+        public MapTransforms(Transform deviceTransform, Transform networkTransform, Vector3 positionOffset, Vector3 rotationOffset) {
+            this.deviceTransform = deviceTransform;
+            this.networkTransform = networkTransform;
+            this.positionOffset = positionOffset;
+            this.rotationOffset = rotationOffset;
+        }
+
+        public void mapTransforms() {
+            networkTransform.position = deviceTransform.TransformPoint(positionOffset);
+            networkTransform.rotation = deviceTransform.rotation * Quaternion.Euler(rotationOffset);
+        }
+    }
 
     // Start is called before the first frame update
     void Start() {
         XROrigin rig = FindObjectOfType<XROrigin>();
+        Transform[] avatarObjects = GetComponentsInChildren<Transform>();
         headDevice = rig.GetComponentInChildren<Camera>().gameObject.transform;
         ActionBasedController[] hands = rig.GetComponentsInChildren<ActionBasedController>();
         if (hands[0].gameObject.name == "LeftHand Controller") {
@@ -36,16 +68,18 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             rightHandDevice = hands[1].gameObject.transform;
         }
         gameManager = FindObjectOfType<MahjongGameManager>();
-
     }
 
     // Update is called once per frame
     void Update() {
         //If avatar isn't loaded yet, don't sync 
         if (photonView.IsMine && avatar != null) {
-            head.SetPositionAndRotation(headDevice.position + new Vector3(0, -(eyes.position.y - head.position.y), 0), headDevice.rotation);
-            leftHand.SetPositionAndRotation(leftHandDevice.position, leftHandDevice.rotation);
-            rightHand.SetPositionAndRotation(rightHandDevice.position, rightHandDevice.rotation);
+            transform.position = head.position + headBodyOffset;
+            transform.forward = Vector3.ProjectOnPlane(head.forward, Vector3.up).normalized;
+
+            headMapping.mapTransforms();
+            leftHandMapping.mapTransforms();
+            rightHandMapping.mapTransforms();
         }
     }
 
@@ -53,7 +87,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         loadAvatar();
     }
 
-    //TODO: Add transform view to head and hands
+    //<summary>Loads the avatar from the provided URL</sumamry>
     private void loadAvatar() {
         if (photonView.IsMine) {
             Debug.Log("Avatar loading...");
@@ -72,8 +106,17 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         if (photonView.IsMine) {
             Debug.Log("Avatar loaded.");
             Transform[] avatarComponents = avatar.GetComponentsInChildren<Transform>();
-
+        
             foreach (Transform component in avatarComponents) {
+
+                if (component.gameObject.name.EndsWith("_EyeLeft") || component.gameObject.name.EndsWith("_EyeRight") ||
+                component.gameObject.name.EndsWith("_Glasses") || component.gameObject.name.EndsWith("_Hair") ||
+                component.gameObject.name.EndsWith("_Head") || component.gameObject.name.EndsWith("_Teeth") || 
+                component.gameObject.name.EndsWith("_Facewear") || component.gameObject.name.EndsWith("_Shirt") || 
+                component.gameObject.name.EndsWith("_Headwear")) {
+                    component.gameObject.layer = LayerMask.NameToLayer("PlayerHead");
+                }
+
                 if (component.gameObject.name == "Neck") {
                     head = component;
                 }
@@ -85,14 +128,24 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                 if (component.gameObject.name == "RightHand") {
                     rightHand = component;
                 }
-
-                //eyes used to calculate distance between neck and eyes to properly place camera
-                if (component.gameObject.name == "RightEye") {
-                    eyes = component;
-                }
             }
+
+            headMapping = new MapTransforms(headDevice, head, new Vector3(0.0f, -0.15f, 0.0f), 
+                new Vector3(0.0f, 0.0f, 0.0f));
+            leftHandMapping = new MapTransforms(leftHandDevice, leftHand, new Vector3(0.0f, -0.06f, -0.15f), 
+                new Vector3(0.0f, 90.0f, 90.0f));
+            rightHandMapping = new MapTransforms(rightHandDevice, rightHand, new Vector3(0.0f, -0.06f, -0.15f), 
+                new Vector3(0.0f, -90.0f, -90.0f));
+
             avatar.GetComponent<Transform>().parent = gameObject.transform;
             this.avatar = avatar;
+        }
+    }
+
+    //TODO: Get interactable interactor name and disable renderer
+    private void disableHandRenderer(GameObject heldObject) {
+        if (photonView.IsMine) {
+
         }
     }
 
@@ -117,9 +170,4 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         return;
     }
 
-    // public override void OnJoinedRoom() {
-    //     base.OnJoinedRoom();
-    //     PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
-    //     Debug.Log("Joined Room.");
-    // }
 }

@@ -28,7 +28,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         shuffling = false;
         tilePositions = new List<TransformData>();
         tiles = new List<GameObject>();
-        //TODO: Fix Find
+        //TODO: Fix GameObject.Find
         TilePositions = GameObject.Find("TilePositions");
         foreach (Tile tile in TilePositions.GetComponentsInChildren<Tile>()) {
             tilePositions.Add(new TransformData(tile.gameObject.transform.position, tile.gameObject.transform.rotation));
