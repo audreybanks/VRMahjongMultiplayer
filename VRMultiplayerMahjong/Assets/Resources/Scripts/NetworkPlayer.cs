@@ -82,6 +82,8 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             rightHandMapping.mapTransforms();
 
             //TODO: Update animation here, add PhotonAnimatorView
+            updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), rightHandAnimator);
+            updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), leftHandAnimator);
         }
     }
 
@@ -163,6 +165,15 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     public void enableHandRenderer() {
         if (photonView.IsMine) {
             handMeshes.GetComponent<Renderer>().enabled = true;
+        }
+    }
+
+    private void updateHandAnimation(InputDevice handDevice, Animator handAnimator) {
+        if (handDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue)) {
+            Debug.Log(handDevice.name + "'s grip value: " + gripValue);
+            handAnimator.SetFloat("Grip", gripValue);
+        } else {
+            handAnimator.SetFloat("Grip", 0.0f);
         }
     }
 
