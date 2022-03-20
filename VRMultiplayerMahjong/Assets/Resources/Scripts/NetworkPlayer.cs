@@ -20,10 +20,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private Transform rightHandDevice;
 
     public string avatarURL;
+    public Animator leftHandAnimator;
+    public Animator rightHandAnimator;
     private GameObject avatar;
-    private GameObject hips;
-    private GameObject leftHandMesh;
-    private GameObject rightHandMesh;
+    private GameObject handMeshes;
 
     private MahjongGameManager gameManager;
 
@@ -80,6 +80,8 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             headMapping.mapTransforms();
             leftHandMapping.mapTransforms();
             rightHandMapping.mapTransforms();
+
+            //TODO: Update animation here, add PhotonAnimatorView
         }
     }
 
@@ -117,16 +119,24 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                     component.gameObject.layer = LayerMask.NameToLayer("PlayerHead");
                 }
 
+                if (component.gameObject.name.EndsWith("_Hands")) {
+                    handMeshes = component.gameObject;
+                }
+
                 if (component.gameObject.name == "Neck") {
                     head = component;
                 }
 
                 if (component.gameObject.name == "LeftHand") {
                     leftHand = component;
+                    leftHandAnimator.transform.parent = leftHand.transform.parent;
+                    leftHand.parent = leftHandAnimator.transform;
                 }
                 
                 if (component.gameObject.name == "RightHand") {
                     rightHand = component;
+                    rightHandAnimator.transform.parent = rightHand.transform.parent;
+                    rightHand.transform.parent = rightHandAnimator.transform;
                 }
             }
 
@@ -142,10 +152,17 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         }
     }
 
-    //TODO: Get interactable interactor name and disable renderer
-    private void disableHandRenderer(GameObject heldObject) {
+    //<summary>Disables the hand renderer, used when grabbing an object</summary>
+    public void disableHandRenderer() {
         if (photonView.IsMine) {
+            handMeshes.GetComponent<Renderer>().enabled = false;
+        }
+    }
 
+    //<summary>Enables the hand renderer, used when letting go of an object</summary>
+    public void enableHandRenderer() {
+        if (photonView.IsMine) {
+            handMeshes.GetComponent<Renderer>().enabled = true;
         }
     }
 
