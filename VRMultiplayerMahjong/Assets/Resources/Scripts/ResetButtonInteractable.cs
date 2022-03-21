@@ -9,8 +9,6 @@ public class ResetButtonInteractable : XRGrabInteractable {
 
     // Start is called before the first frame update
     void Start() {
-        // Debug.Log("Reset button created");
-        // Debug.Log("Reset button: " + mahjongGameManager.isShuffling());
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {

@@ -106,8 +106,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
     ///<summary>Shuffles and resets the tile positions. Can only be activated by the Master Client.</summary>
     public void resetTiles() {
         shuffling = true;
-        Debug.Log("Clicked reset button");
-        Debug.Log("isShuffling: " + shuffling);
+        // Debug.Log("Clicked reset button");
+        // Debug.Log("isShuffling: " + shuffling);
         if (PhotonNetwork.IsMasterClient) {
             previousColor = resetButton.GetComponent<Renderer>().material.color;
             photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, 0.5f, 0.5f, 0.5f, 1.0f);

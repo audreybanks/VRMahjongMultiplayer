@@ -20,13 +20,13 @@ public class NetworkInteractable : XRGrabInteractable {
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
         Debug.Log("RequestOwnership() called");
-        player.disableHandRenderer();
+        player.disableHandRenderer(args.interactorObject.transform);
         photonView.RequestOwnership();
         base.OnSelectEntered(args);
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args) {
-        player.enableHandRenderer();
+        player.enableHandRenderer(args.interactorObject.transform);
         base.OnSelectExited(args);
     }
 

@@ -20,8 +20,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private Transform rightHandDevice;
 
     public string avatarURL;
-    public Animator leftHandAnimator;
-    public Animator rightHandAnimator;
+    private Animator handAnimator;
     private GameObject avatar;
     private GameObject handMeshes;
 
@@ -82,8 +81,8 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             rightHandMapping.mapTransforms();
 
             //TODO: Update animation here, add PhotonAnimatorView
-            updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), rightHandAnimator);
-            updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), leftHandAnimator);
+            updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), "RightGrip");
+            updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), "LeftGrip");
         }
     }
 
@@ -131,14 +130,16 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
                 if (component.gameObject.name == "LeftHand") {
                     leftHand = component;
-                    leftHandAnimator.transform.parent = leftHand.transform.parent;
-                    leftHand.parent = leftHandAnimator.transform;
+                    
                 }
                 
                 if (component.gameObject.name == "RightHand") {
                     rightHand = component;
-                    rightHandAnimator.transform.parent = rightHand.transform.parent;
-                    rightHand.transform.parent = rightHandAnimator.transform;
+                }
+
+                if (component.gameObject.name == "Spine") {
+                    handAnimator = component.gameObject.AddComponent<Animator>();
+                    handAnimator.runtimeAnimatorController = Resources.Load("Animations/HandAnimator") as RuntimeAnimatorController;
                 }
             }
 
@@ -155,25 +156,38 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     }
 
     //<summary>Disables the hand renderer, used when grabbing an object</summary>
-    public void disableHandRenderer() {
+    public void disableHandRenderer(Transform interactor) {
         if (photonView.IsMine) {
-            handMeshes.GetComponent<Renderer>().enabled = false;
+            if (interactor.name == "RightHand Controller") {
+                rightHand.transform.localScale = Vector3.zero;
+            } else {
+                leftHand.transform.localScale = Vector3.zero;
+            }
         }
     }
 
     //<summary>Enables the hand renderer, used when letting go of an object</summary>
-    public void enableHandRenderer() {
+    public void enableHandRenderer(Transform interactor) {
         if (photonView.IsMine) {
-            handMeshes.GetComponent<Renderer>().enabled = true;
+            if (interactor.name == "RightHand Controller") {
+                rightHand.transform.localScale = Vector3.one;
+            } else {
+                leftHand.transform.localScale = Vector3.one;
+            }
         }
     }
 
-    private void updateHandAnimation(InputDevice handDevice, Animator handAnimator) {
+    //<summary>Updates the hand animations based on the grip input strength</summary>
+    private void updateHandAnimation(InputDevice handDevice, string parameter) {
         if (handDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue)) {
-            Debug.Log(handDevice.name + "'s grip value: " + gripValue);
-            handAnimator.SetFloat("Grip", gripValue);
+            //Debug.Log(handDevice.name + "'s grip value: " + gripValue);
+            if (gripValue >= 1.0f) {
+                handAnimator.SetFloat(parameter, 0.9999f); 
+            } else {
+                handAnimator.SetFloat(parameter, gripValue);
+            }
         } else {
-            handAnimator.SetFloat("Grip", 0.0f);
+            handAnimator.SetFloat(parameter, 0.0f);
         }
     }
 
