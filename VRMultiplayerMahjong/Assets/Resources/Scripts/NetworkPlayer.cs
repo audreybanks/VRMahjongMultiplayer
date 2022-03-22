@@ -90,6 +90,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         loadAvatar();
     }
 
+    //TODO: Move avatar loading to SpawnPlayer
     //<summary>Loads the avatar from the provided URL</sumamry>
     private void loadAvatar() {
         if (photonView.IsMine) {
@@ -140,6 +141,15 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                 if (component.gameObject.name == "Spine") {
                     handAnimator = component.gameObject.AddComponent<Animator>();
                     handAnimator.runtimeAnimatorController = Resources.Load("Animations/HandAnimator") as RuntimeAnimatorController;
+
+                    PhotonAnimatorView photonAnimatorView = component.gameObject.AddComponent<PhotonAnimatorView>();
+                    photonAnimatorView.SetLayerSynchronized(0, PhotonAnimatorView.SynchronizeType.Continuous);
+                    photonAnimatorView.SetLayerSynchronized(1, PhotonAnimatorView.SynchronizeType.Continuous);
+
+                    photonAnimatorView.SetParameterSynchronized("RightGrip", PhotonAnimatorView.ParameterType.Float, 
+                        PhotonAnimatorView.SynchronizeType.Continuous);
+                    photonAnimatorView.SetParameterSynchronized("LeftGrip", PhotonAnimatorView.ParameterType.Float, 
+                        PhotonAnimatorView.SynchronizeType.Continuous);
                 }
             }
 
@@ -150,10 +160,13 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             rightHandMapping = new MapTransforms(rightHandDevice, rightHand, new Vector3(0.0f, -0.06f, -0.15f), 
                 new Vector3(0.0f, -90.0f, -90.0f));
 
+            //TODO: remove when making setAvatar
             avatar.GetComponent<Transform>().parent = gameObject.transform;
+            
             this.avatar = avatar;
         }
     }
+    
 
     //<summary>Disables the hand renderer, used when grabbing an object</summary>
     public void disableHandRenderer(Transform interactor) {
