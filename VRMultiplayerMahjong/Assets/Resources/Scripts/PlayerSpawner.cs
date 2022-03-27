@@ -5,7 +5,10 @@ using Photon.Pun;
 using Photon.Realtime;
 using Wolf3D.ReadyPlayerMe.AvatarSDK;
 
-public class PlayerSpawner : MonoBehaviour {
+public class PlayerSpawner : MonoBehaviourPun {
+
+    private GameObject avatar;
+
     // Start is called before the first frame update
     void Start() {}
 
@@ -18,5 +21,11 @@ public class PlayerSpawner : MonoBehaviour {
 
     private void loadAvatar(string avatarURL) {
 
+    }
+
+    //Check is photonView IsMine before invoking
+    ///<summary>Returns the </summary>
+    public GameObject getAvatar() {
+        return avatar;
     }
 }

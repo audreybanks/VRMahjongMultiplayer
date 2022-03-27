@@ -8,7 +8,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Wolf3D.ReadyPlayerMe.AvatarSDK;
 
-public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, IPunInstantiateMagicCallback {
+public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, IPunInstantiateMagicCallback, IPunObservable {
 
     public Vector3 headBodyOffset;
     private Transform head;
@@ -22,6 +22,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     public string avatarURL;
     private Animator handAnimator;
     private GameObject avatar;
+    private int loadedAvatar;
     private GameObject handMeshes;
 
     private MahjongGameManager gameManager;
@@ -31,7 +32,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     [SerializeField] private MapTransforms rightHandMapping;
 
 
-    //<summary>Class to map the network Transform and the device Transform</summary>
+    ///<summary>Class to map the network Transform and the device Transform</summary>
     [System.Serializable]
     private class MapTransforms {
         public Transform deviceTransform;
@@ -86,89 +87,118 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         }
     }
 
-    public void OnPhotonInstantiate(PhotonMessageInfo info) {
-        loadAvatar();
+    //Used to update the position and rotations of each avatar child.
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        //if (avatar != null) {
+        if (stream.IsWriting) {
+            foreach (Transform child in GetComponentsInChildren<Transform>()) {
+                if (child != null) {
+                    stream.SendNext(child.position);
+                    stream.SendNext(child.rotation);
+                }
+            }
+        } else if (stream.IsReading) {
+            foreach (Transform child in GetComponentsInChildren<Transform>()) {
+                if (child != null) {
+                    child.position = (Vector3)stream.ReceiveNext();
+                    child.rotation = (Quaternion)stream.ReceiveNext();
+                }
+            }
+        }
+        //}
     }
 
-    //TODO: Move avatar loading to SpawnPlayer
-    //<summary>Loads the avatar from the provided URL</sumamry>
-    private void loadAvatar() {
+    public void OnPhotonInstantiate(PhotonMessageInfo info) {
         if (photonView.IsMine) {
-            Debug.Log("Avatar loading...");
-            AvatarLoader avatarLoader = new AvatarLoader();
-            avatarLoader.LoadAvatar(avatarURL, OnAvatarImported, OnAvatarLoaded);
+            loadAvatar();
         }
+    }
+
+    ///<summary>Loads the avatar from the provided URL</sumamry>
+    private void loadAvatar() {
+        Debug.Log("Avatar loading...");
+        AvatarLoader avatarLoader = new AvatarLoader();
+        avatarLoader.LoadAvatar(avatarURL, OnAvatarImported, OnAvatarLoaded);
     }
 
     private void OnAvatarImported(GameObject avatar) {
-        if (photonView.IsMine) {
-            Debug.Log("Avatar is imported...");
-        }
+        Debug.Log("Avatar is imported...");
     }
 
     private void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData) {
+        Debug.Log("Avatar loaded.");
         if (photonView.IsMine) {
-            Debug.Log("Avatar loaded.");
-            Transform[] avatarComponents = avatar.GetComponentsInChildren<Transform>();
-        
-            foreach (Transform component in avatarComponents) {
-
-                if (component.gameObject.name.EndsWith("_EyeLeft") || component.gameObject.name.EndsWith("_EyeRight") ||
-                component.gameObject.name.EndsWith("_Glasses") || component.gameObject.name.EndsWith("_Hair") ||
-                component.gameObject.name.EndsWith("_Head") || component.gameObject.name.EndsWith("_Teeth") || 
-                component.gameObject.name.EndsWith("_Facewear") || component.gameObject.name.EndsWith("_Shirt") || 
-                component.gameObject.name.EndsWith("_Headwear")) {
-                    component.gameObject.layer = LayerMask.NameToLayer("PlayerHead");
-                }
-
-                if (component.gameObject.name.EndsWith("_Hands")) {
-                    handMeshes = component.gameObject;
-                }
-
-                if (component.gameObject.name == "Neck") {
-                    head = component;
-                }
-
-                if (component.gameObject.name == "LeftHand") {
-                    leftHand = component;
-                    
-                }
-                
-                if (component.gameObject.name == "RightHand") {
-                    rightHand = component;
-                }
-
-                if (component.gameObject.name == "Spine") {
-                    handAnimator = component.gameObject.AddComponent<Animator>();
-                    handAnimator.runtimeAnimatorController = Resources.Load("Animations/HandAnimator") as RuntimeAnimatorController;
-
-                    PhotonAnimatorView photonAnimatorView = component.gameObject.AddComponent<PhotonAnimatorView>();
-                    photonAnimatorView.SetLayerSynchronized(0, PhotonAnimatorView.SynchronizeType.Continuous);
-                    photonAnimatorView.SetLayerSynchronized(1, PhotonAnimatorView.SynchronizeType.Continuous);
-
-                    photonAnimatorView.SetParameterSynchronized("RightGrip", PhotonAnimatorView.ParameterType.Float, 
-                        PhotonAnimatorView.SynchronizeType.Continuous);
-                    photonAnimatorView.SetParameterSynchronized("LeftGrip", PhotonAnimatorView.ParameterType.Float, 
-                        PhotonAnimatorView.SynchronizeType.Continuous);
-                }
-            }
-
-            headMapping = new MapTransforms(headDevice, head, new Vector3(0.0f, -0.15f, 0.0f), 
-                new Vector3(0.0f, 0.0f, 0.0f));
-            leftHandMapping = new MapTransforms(leftHandDevice, leftHand, new Vector3(0.0f, -0.06f, -0.15f), 
-                new Vector3(0.0f, 90.0f, 90.0f));
-            rightHandMapping = new MapTransforms(rightHandDevice, rightHand, new Vector3(0.0f, -0.06f, -0.15f), 
-                new Vector3(0.0f, -90.0f, -90.0f));
-
-            //TODO: remove when making setAvatar
-            avatar.GetComponent<Transform>().parent = gameObject.transform;
-            
+            setAvatarComponents(avatar);
+            avatar.transform.parent = gameObject.transform;
             this.avatar = avatar;
+            photonView.RPC("loadAvatarRPC", RpcTarget.OthersBuffered, photonView.OwnerActorNr, avatarURL);
+        } else if (!photonView.IsMine && loadedAvatar == photonView.OwnerActorNr) {
+            avatar.transform.parent = gameObject.transform;
         }
     }
-    
 
-    //<summary>Disables the hand renderer, used when grabbing an object</summary>
+    [PunRPC]
+    private void loadAvatarRPC(int actorID, string URL) {
+        loadedAvatar = actorID;
+        avatarURL = URL;
+        if (loadedAvatar == photonView.OwnerActorNr) {
+            loadAvatar();
+        }
+    }
+
+    private void setAvatarComponents(GameObject avatar) {
+        Transform[] avatarComponents = avatar.GetComponentsInChildren<Transform>();
+        foreach (Transform component in avatarComponents) {
+            if (component.gameObject.name.EndsWith("_EyeLeft") || component.gameObject.name.EndsWith("_EyeRight") ||
+        component.gameObject.name.EndsWith("_Glasses") || component.gameObject.name.EndsWith("_Hair") ||
+        component.gameObject.name.EndsWith("_Head") || component.gameObject.name.EndsWith("_Teeth") ||
+        component.gameObject.name.EndsWith("_Facewear") || component.gameObject.name.EndsWith("_Shirt") ||
+        component.gameObject.name.EndsWith("_Headwear")) {
+                component.gameObject.layer = LayerMask.NameToLayer("PlayerHead");
+            }
+
+            if (component.gameObject.name.EndsWith("_Hands")) {
+                handMeshes = component.gameObject;
+            }
+
+            if (component.gameObject.name == "Neck") {
+                head = component;
+            }
+
+            if (component.gameObject.name == "LeftHand") {
+                leftHand = component;
+
+            }
+
+            if (component.gameObject.name == "RightHand") {
+                rightHand = component;
+            }
+
+            if (component.gameObject.name == "Spine") {
+                handAnimator = component.gameObject.AddComponent<Animator>();
+                handAnimator.runtimeAnimatorController = Resources.Load("Animations/HandAnimator") as RuntimeAnimatorController;
+
+                PhotonAnimatorView photonAnimatorView = component.gameObject.AddComponent<PhotonAnimatorView>();
+                photonAnimatorView.SetLayerSynchronized(0, PhotonAnimatorView.SynchronizeType.Continuous);
+                photonAnimatorView.SetLayerSynchronized(1, PhotonAnimatorView.SynchronizeType.Continuous);
+
+                photonAnimatorView.SetParameterSynchronized("RightGrip", PhotonAnimatorView.ParameterType.Float,
+                    PhotonAnimatorView.SynchronizeType.Continuous);
+                photonAnimatorView.SetParameterSynchronized("LeftGrip", PhotonAnimatorView.ParameterType.Float,
+                    PhotonAnimatorView.SynchronizeType.Continuous);
+            }
+        }
+
+        headMapping = new MapTransforms(headDevice, head, new Vector3(0.0f, -0.15f, 0.0f),
+            new Vector3(0.0f, 0.0f, 0.0f));
+        leftHandMapping = new MapTransforms(leftHandDevice, leftHand, new Vector3(0.0f, -0.06f, -0.15f),
+            new Vector3(0.0f, 90.0f, 90.0f));
+        rightHandMapping = new MapTransforms(rightHandDevice, rightHand, new Vector3(0.0f, -0.06f, -0.15f),
+            new Vector3(0.0f, -90.0f, -90.0f));
+    }
+
+
+    ///<summary>Disables the hand renderer, used when grabbing an object</summary>
     public void disableHandRenderer(Transform interactor) {
         if (photonView.IsMine) {
             if (interactor.name == "RightHand Controller") {
@@ -179,7 +209,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         }
     }
 
-    //<summary>Enables the hand renderer, used when letting go of an object</summary>
+    ///<summary>Enables the hand renderer, used when letting go of an object</summary>
     public void enableHandRenderer(Transform interactor) {
         if (photonView.IsMine) {
             if (interactor.name == "RightHand Controller") {
@@ -190,12 +220,12 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         }
     }
 
-    //<summary>Updates the hand animations based on the grip input strength</summary>
+    ///<summary>Updates the hand animations based on the grip input strength</summary>
     private void updateHandAnimation(InputDevice handDevice, string parameter) {
         if (handDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue)) {
             //Debug.Log(handDevice.name + "'s grip value: " + gripValue);
             if (gripValue >= 1.0f) {
-                handAnimator.SetFloat(parameter, 0.9999f); 
+                handAnimator.SetFloat(parameter, 0.9999f);
             } else {
                 handAnimator.SetFloat(parameter, gripValue);
             }

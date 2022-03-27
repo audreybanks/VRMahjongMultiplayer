@@ -39,7 +39,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
             resetButton = PhotonNetwork.InstantiateRoomObject("Prefabs/ResetButton", new Vector3(0.620000005f, 1.35000002f, 1.14999998f), Quaternion.identity);
             resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = gameObject.GetComponent<MahjongGameManager>();
             //After instatiating the reset button as the Master Client, use an rpc to set it for the other clients.
-            photonView.RPC("setResetButton", RpcTarget.AllBuffered, resetButton.GetComponent<PhotonView>().ViewID);
+            photonView.RPC("setResetButton", RpcTarget.AllBuffered, resetButton.GetComponent<PhotonView>().ViewID, GetComponent<PhotonView>().ViewID);
         }
         buildWall();
     }
@@ -85,9 +85,10 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
 
     ///<summary>Sets the reset button for all players besides the Master Client</summary>
     [PunRPC]
-    private void setResetButton(int resetButtonID) {
+    private void setResetButton(int resetButtonID, int gameManagerID) {
         if (!PhotonNetwork.IsMasterClient) {
             resetButton = PhotonNetwork.GetPhotonView(resetButtonID).gameObject;
+            resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = PhotonNetwork.GetPhotonView(gameManagerID).transform.GetComponent<MahjongGameManager>();
         }
     }
 

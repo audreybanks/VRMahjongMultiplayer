@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1006448698268091801}
   - component: {fileID: -6982918873057737497}
   - component: {fileID: 4475520572163513376}
+  - component: {fileID: 5632342616995039315}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -50,7 +51,9 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 4475520572163513376}
+  - {fileID: 5632342616995039315}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -67,7 +70,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headBodyOffset: {x: 0, y: 0, z: 0}
-  avatarURL: https://d1a370nemizbjq.cloudfront.net/ff1e5d2e-bb72-467d-8d34-0a5118a0c783.glb
+  avatarURL: https://d1a370nemizbjq.cloudfront.net/1779178f-9c58-4fb8-beae-fa5227909548.glb
   headMapping:
     deviceTransform: {fileID: 0}
     networkTransform: {fileID: 0}
@@ -83,3 +86,19 @@ MonoBehaviour:
     networkTransform: {fileID: 0}
     positionOffset: {x: 0, y: 0, z: -0.06}
     rotationOffset: {x: 0, y: -90, z: -90}
+--- !u!114 &5632342616995039315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485802994222296695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

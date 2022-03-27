@@ -40,6 +40,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     public override void OnLeftRoom() {
         base.OnLeftRoom();
+        // Destroy(player)
         PhotonNetwork.Destroy(playerPrefab);
     }
 
