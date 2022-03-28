@@ -9,25 +9,16 @@ public class NetworkInteractable : XRGrabInteractable {
     private PhotonView photonView;
     private Material[] tileMats;
 
-    private NetworkPlayer player;
-
     // Start is called before the first frame update
     void Start() {
         photonView = GetComponent<PhotonView>();
         tileMats = gameObject.GetComponent<Renderer>().materials;
-        player = GameObject.FindObjectOfType<NetworkPlayer>();
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
         Debug.Log("RequestOwnership() called");
-        player.disableHandRenderer(args.interactorObject.transform);
         photonView.RequestOwnership();
         base.OnSelectEntered(args);
-    }
-
-    protected override void OnSelectExited(SelectExitEventArgs args) {
-        player.enableHandRenderer(args.interactorObject.transform);
-        base.OnSelectExited(args);
     }
 
     //tiles highlight when hovered over

@@ -18,6 +18,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private Transform headDevice;
     private Transform leftHandDevice;
     private Transform rightHandDevice;
+    private XROrigin rig;
 
     public string avatarURL;
     private Animator handAnimator;
@@ -56,7 +57,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
     // Start is called before the first frame update
     void Start() {
-        XROrigin rig = FindObjectOfType<XROrigin>();
+        rig = FindObjectOfType<XROrigin>();
         Transform[] avatarObjects = GetComponentsInChildren<Transform>();
         headDevice = rig.GetComponentInChildren<Camera>().gameObject.transform;
         ActionBasedController[] hands = rig.GetComponentsInChildren<ActionBasedController>();
@@ -84,6 +85,11 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             //TODO: Update animation here, add PhotonAnimatorView
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), "RightGrip");
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), "LeftGrip");
+
+            foreach (XRDirectInteractor device in rig.GetComponentsInChildren<XRDirectInteractor>()) {
+                Debug.Log("Is selecting: " + device.isSelectActive);
+            }
+
         }
     }
 
@@ -199,9 +205,9 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
 
     ///<summary>Disables the hand renderer, used when grabbing an object</summary>
-    public void disableHandRenderer(Transform interactor) {
+    public void disableHandRenderer(string interactor) {
         if (photonView.IsMine) {
-            if (interactor.name == "RightHand Controller") {
+            if (interactor == "RightHand Controller") {
                 rightHand.transform.localScale = Vector3.zero;
             } else {
                 leftHand.transform.localScale = Vector3.zero;
@@ -210,9 +216,9 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     }
 
     ///<summary>Enables the hand renderer, used when letting go of an object</summary>
-    public void enableHandRenderer(Transform interactor) {
+    public void enableHandRenderer(string interactor) {
         if (photonView.IsMine) {
-            if (interactor.name == "RightHand Controller") {
+            if (interactor == "RightHand Controller") {
                 rightHand.transform.localScale = Vector3.one;
             } else {
                 leftHand.transform.localScale = Vector3.one;
