@@ -25,7 +25,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private GameObject avatar;
     private int loadedAvatar;
     private GameObject handMeshes;
-    private bool isHandEnabled;
 
     private MahjongGameManager gameManager;
 
@@ -88,14 +87,14 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), "LeftGrip");
 
             foreach (XRDirectInteractor device in rig.GetComponentsInChildren<XRDirectInteractor>()) {
-                if (isHandEnabled && device.interactablesSelected.Count != 0) {
+                if (device.hasSelection) {
+                    Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
                     disableHandRenderer(device.transform.name);
-                    isHandEnabled = false;
-                } else if (!isHandEnabled && device.interactablesSelected.Count == 0) {
-                    //interactableselected not 0
+                } else if (!device.hasSelection) {
+                    Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
                     enableHandRenderer(device.transform.name);
-                    isHandEnabled = true;
                 }
+
             }
 
         }
@@ -143,7 +142,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         Debug.Log("Avatar loaded.");
         if (photonView.IsMine) {
             setAvatarComponents(avatar);
-            isHandEnabled = true;
             avatar.transform.parent = gameObject.transform;
             this.avatar = avatar;
             photonView.RPC("loadAvatarRPC", RpcTarget.OthersBuffered, photonView.OwnerActorNr, avatarURL);

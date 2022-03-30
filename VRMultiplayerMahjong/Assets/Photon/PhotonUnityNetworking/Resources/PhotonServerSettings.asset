@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: 99637bdf-88bc-43ca-acc0-3c1fa44d0f4f
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: c879b789-e2e6-4b7a-bb0c-027b1fc26c3a
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -45,6 +45,10 @@ MonoBehaviour:
   - updateShuffleState
   - setResetButton
   - loadAvatarRPC
+  - CantHearYou
+  - ChangeColour
+  - HeresWhy
+  - addTile
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

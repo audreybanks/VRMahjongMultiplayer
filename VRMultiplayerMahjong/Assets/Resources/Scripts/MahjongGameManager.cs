@@ -70,17 +70,26 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
             // Debug.Log("buildWall() called");
             for (int i = 0; i < 4; i++) {
                 for (int j = (31 * i); j < (31 * i) + 31; j++) {
-                    tiles.Add(PhotonNetwork.InstantiateRoomObject("Prefabs/Tiles/" + tilePrefabs[j % 31].name, tilePositions[j].position, tilePositions[j].rotation));
+                    int tileID = PhotonNetwork.InstantiateRoomObject("Prefabs/Tiles/" + tilePrefabs[j % 31].name, tilePositions[j].position, tilePositions[j].rotation).
+                        GetComponent<PhotonView>().ViewID;
+                    photonView.RPC("addTile", RpcTarget.AllBuffered, tileID);
                 }
             }
 
             for (int i = 0; i < 2; i++) {
                 for (int j = 124 + (6 * i); j < 124 + (6 * i) + 6; j++) {
-                    tiles.Add(PhotonNetwork.InstantiateRoomObject("Prefabs/TilesSpecial/" + tileSpecialPrefabs[(j - 124) % 6].name, tilePositions[j].position, tilePositions[j].rotation));
+                    int tileID = PhotonNetwork.InstantiateRoomObject("Prefabs/TilesSpecial/" + tileSpecialPrefabs[(j - 124) % 6].name, tilePositions[j].position, tilePositions[j].rotation).
+                        GetComponent<PhotonView>().ViewID;
+                    photonView.RPC("addTile", RpcTarget.AllBuffered, tileID);
                 }
             }
         }
         photonView.RPC("updateShuffleState", RpcTarget.AllBuffered, false);
+    }
+
+    [PunRPC]
+    private void addTile(int tileID) {
+        tiles.Add(PhotonNetwork.GetPhotonView(tileID).gameObject);
     }
 
     ///<summary>Sets the reset button for all players besides the Master Client</summary>
@@ -119,9 +128,13 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
                 tile.GetComponent<PhotonTransformView>().enabled = false;
             }
 
+            Debug.Log("tile count: " + tiles.Count);
+            Debug.Log("tilePositions count: " + tilePositions.Count);
             //Have the Master Client shuffle the positions and move tiles
             shuffleTilePositions();
 
+            Debug.Log("tile count: " + tiles.Count);
+            Debug.Log("tilePositions count: " + tilePositions.Count);
             for (int i = 0; i < tilePositions.Count; i++) {
                 tiles[i].transform.position = tilePositions[i].position;
                 tiles[i].transform.rotation = tilePositions[i].rotation;
