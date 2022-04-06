@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,10 +89,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
             foreach (XRDirectInteractor device in rig.GetComponentsInChildren<XRDirectInteractor>()) {
                 if (device.hasSelection) {
-                    Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
+                    //Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
                     disableHandRenderer(device.transform.name);
                 } else if (!device.hasSelection) {
-                    Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
+                    //Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
                     enableHandRenderer(device.transform.name);
                 }
 
@@ -106,15 +107,24 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         if (stream.IsWriting) {
             foreach (Transform child in GetComponentsInChildren<Transform>()) {
                 if (child != null) {
-                    stream.SendNext(child.position);
-                    stream.SendNext(child.rotation);
+                    try {
+                        stream.SendNext(child.position);
+                        stream.SendNext(child.rotation);
+                    } catch (InvalidCastException e) {
+                        Debug.LogError(e + "for " + child.gameObject.name);
+                    }
                 }
             }
         } else if (stream.IsReading) {
             foreach (Transform child in GetComponentsInChildren<Transform>()) {
                 if (child != null) {
-                    child.position = (Vector3)stream.ReceiveNext();
-                    child.rotation = (Quaternion)stream.ReceiveNext();
+                    try {
+                        child.position = (Vector3)stream.ReceiveNext();
+                        child.rotation = (Quaternion)stream.ReceiveNext();
+                    } catch (InvalidCastException e) {
+                        Debug.LogError(e + "for " + child.gameObject.name);
+                    }
+                    
                 }
             }
         }

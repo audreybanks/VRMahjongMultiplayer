@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -8,12 +9,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     private GameObject playerPrefab;
     private GameObject gameManager;
+    public GameObject table;
+    public GameObject plane;
+    public Button startButton;
+    public GameObject startingTiles;
 
     void Start() {
-        connectToServer();
+        table.SetActive(false);
+        plane.SetActive(false);
+        startingTiles.SetActive(false);
     }
 
-    private void connectToServer() {
+    public void connectToServer() {
+        startButton.interactable = false;
         Debug.Log("Connecting...");
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -31,6 +39,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
+        startButton.GetComponentInParent<Canvas>().gameObject.SetActive(false);
+        table.SetActive(true);
+        plane.SetActive(true);
+        startingTiles.SetActive(true);
         Debug.Log("Joined Room.");
         playerPrefab = PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
         gameManager = PhotonNetwork.InstantiateRoomObject("Prefabs/MahjongGameManager", transform.position, transform.rotation);
@@ -38,7 +50,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     public override void OnLeftRoom() {
         base.OnLeftRoom();
-        // Destroy(player)
         PhotonNetwork.Destroy(playerPrefab);
     }
 
