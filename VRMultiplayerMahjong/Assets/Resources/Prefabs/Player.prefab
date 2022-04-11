@@ -92,8 +92,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4227633746019924267}
   - component: {fileID: 4227633746019924271}
-  - component: {fileID: 4227633746019924269}
   - component: {fileID: 1028988606523351778}
+  - component: {fileID: 4227633746019924269}
   m_Layer: 0
   m_Name: RightHand Controller
   m_TagString: Untagged
@@ -284,19 +284,6 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 875253871413052681, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ButtonPressPoint: 0.5
---- !u!135 &4227633746019924269
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4227633746019924266}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Center: {x: -0.02, y: -0.04, z: 0}
 --- !u!114 &1028988606523351778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,6 +362,19 @@ MonoBehaviour:
   m_PlayHapticsOnHoverCanceled: 0
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
+--- !u!135 &4227633746019924269
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4227633746019924266}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03
+  m_Center: {x: -0.02, y: -0.04, z: 0}
 --- !u!1 &4227633746162260263
 GameObject:
   m_ObjectHideFlags: 0
