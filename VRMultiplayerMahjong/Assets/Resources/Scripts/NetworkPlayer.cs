@@ -93,7 +93,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             leftHandMapping.mapTransforms();
             rightHandMapping.mapTransforms();
 
-            //TODO: Update animation here, add PhotonAnimatorView
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), "RightGrip");
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), "LeftGrip");
 
@@ -106,25 +105,56 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                     enableHandRenderer(device.transform.name);
                 }
             }
-
-            //update avatar positions here?
-
         }
 
-        //Debug.Log("Update called");
+        //Debug.Log("Update called for Player " + photonView.OwnerActorNr);
     }
 
     //Used to update the position and rotations of each avatar child.
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         //TODO: Make list of position and rotation for all avatar components
         //TODO: Send int of list items and check if the local list has the same amount of items
-        //Debug.Log("OnPhotonSerializeView called");
-        if (stream.IsWriting) {
+        //Debug.Log("OnPhotonSerializeView called for Player " + photonView.OwnerActorNr);
 
-        } else if (stream.IsReading) {
-
+        int listCount = 0;
+        avatarComponentPositions = new List<Vector3>();
+        avatarComponentRotations = new List<Quaternion>();
+        Transform[] avatarComponents = GetComponentsInChildren<Transform>();
+        if (photonView.IsMine) {
+            listCount = avatarComponents.Length;
+            foreach (Transform component in avatarComponents) {
+                avatarComponentPositions.Add(component.position);
+                avatarComponentRotations.Add(component.rotation);
+            }
         }
 
+
+        if (stream.IsWriting) {
+            stream.SendNext(avatarComponents.Length);
+        } else if (stream.IsReading) {
+            listCount = (int)stream.ReceiveNext();
+        }
+
+        //Debug.Log("listCount: " + listCount + ", avatarComponents.Length: " + avatarComponents.Length);
+
+        if (listCount == avatarComponents.Length) {
+            for (int i = 0; i < listCount; i++) {
+                if (stream.IsWriting) {
+                    stream.SendNext(avatarComponentPositions[i]);
+                    stream.SendNext(avatarComponentRotations[i]);
+                } else if (stream.IsReading) {
+                    avatarComponentPositions.Add((Vector3)stream.ReceiveNext());
+                    avatarComponentRotations.Add((Quaternion)stream.ReceiveNext());
+                }
+            }
+        }
+
+        if (!photonView.IsMine) {
+            for (int i = 0; i < avatarComponentPositions.Count; i++) {
+                avatarComponents[i].position = avatarComponentPositions[i];
+                avatarComponents[i].rotation = avatarComponentRotations[i];
+            }
+        }
         //update avatar transforms here?
     }
 
@@ -132,9 +162,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private void updateAvatarTransforms() {
 
     }
-
-
-
 
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         if (photonView.IsMine) {
@@ -177,7 +204,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private void setAvatarComponents(GameObject avatar) {
         Transform[] avatarComponents = avatar.GetComponentsInChildren<Transform>();
         foreach (Transform component in avatarComponents) {
-            component.gameObject.AddComponent<PhotonTransformView>();
             if (component.gameObject.name.EndsWith("_EyeLeft") || component.gameObject.name.EndsWith("_EyeRight") ||
         component.gameObject.name.EndsWith("_Glasses") || component.gameObject.name.EndsWith("_Hair") ||
         component.gameObject.name.EndsWith("_Head") || component.gameObject.name.EndsWith("_Teeth") ||

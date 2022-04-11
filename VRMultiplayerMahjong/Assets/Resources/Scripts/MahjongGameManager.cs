@@ -79,7 +79,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
                 for (int j = (31 * i); j < (31 * i) + 31; j++) {
                     GameObject tile = PhotonNetwork.InstantiateRoomObject("Prefabs/Tiles/" + tilePrefabs[j % 31].name, tilePositions[j].position, 
                         tilePositions[j].rotation);
-                    tile.transform.parent = TilePositions.transform;
+                    //tile.transform.parent = TilePositions.transform;
                     int tileID = tile.GetComponent<PhotonView>().ViewID;
                     photonView.RPC("addTile", RpcTarget.AllBuffered, tileID);
                 }
@@ -89,7 +89,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
                 for (int j = 124 + (6 * i); j < 124 + (6 * i) + 6; j++) {
                     GameObject tile = PhotonNetwork.InstantiateRoomObject("Prefabs/TilesSpecial/" + tileSpecialPrefabs[(j - 124) % 6].name, tilePositions[j].position, 
                         tilePositions[j].rotation);
-                    tile.transform.parent = TilePositions.transform;
+                    //tile.transform.parent = TilePositions.transform;
                     int tileID = tile.GetComponent<PhotonView>().ViewID;
                     photonView.RPC("addTile", RpcTarget.AllBuffered, tileID);
                 }
@@ -101,6 +101,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
     [PunRPC]
     private void addTile(int tileID) {
         tiles.Add(PhotonNetwork.GetPhotonView(tileID).gameObject);
+        //PhotonNetwork.GetPhotonView(tileID).gameObject.transform.parent = TilePositions.transform;
     }
 
     ///<summary>Sets the reset button for all players besides the Master Client</summary>

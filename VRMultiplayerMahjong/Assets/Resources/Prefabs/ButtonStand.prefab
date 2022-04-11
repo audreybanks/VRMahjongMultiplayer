@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6652148614319412875}
   - component: {fileID: 6652148614319412877}
   - component: {fileID: 6652148614319412876}
+  - component: {fileID: 2957689081304143477}
   m_Layer: 0
   m_Name: PushButton
   m_TagString: Untagged
@@ -81,6 +82,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2957689081304143477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6652148614319412874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &6652148615023801293
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +111,7 @@ GameObject:
   - component: {fileID: 6652148615023801280}
   - component: {fileID: 6652148615023801295}
   - component: {fileID: 4477176293079178984}
-  - component: {fileID: 2492236318289106755}
+  - component: {fileID: 7922076525369917934}
   m_Layer: 0
   m_Name: Push
   m_TagString: Untagged
@@ -262,7 +279,7 @@ MonoBehaviour:
   onReleased:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2492236318289106755
+--- !u!114 &7922076525369917934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,13 +288,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6652148615023801293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &6652148615240768016
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +541,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 7922076525369917934}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

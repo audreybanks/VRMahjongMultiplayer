@@ -15,12 +15,12 @@ D:/Documents/5th Year/Spring/CSCI4950/VRMahjongMultiplayer/VRMahjongMultiplayer/
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-54291
+62495
 Successfully changed project path to: D:/Documents/5th Year/Spring/CSCI4950/VRMahjongMultiplayer/VRMahjongMultiplayer/VRMultiplayerMahjong
 D:/Documents/5th Year/Spring/CSCI4950/VRMahjongMultiplayer/VRMahjongMultiplayer/VRMultiplayerMahjong
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 88.02 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.96 ms.
+Refreshing native plugins compatible for Editor in 75.27 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.86 ms.
 Initialize engine version: 2020.3.24f1 (79c78de19888)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Resources/UnitySubsystems
 [Subsystems] Discovering subsystems at path D:/Documents/5th Year/Spring/CSCI4950/VRMahjongMultiplayer/VRMahjongMultiplayer/VRMultiplayerMahjong/Assets
@@ -35,49 +35,49 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56596
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56488
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002107 seconds.
+Registered in 0.001773 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 73.32 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.07 ms.
+Refreshing native plugins compatible for Editor in 60.67 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.05 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.596 seconds
+- Completed reload, in  0.517 seconds
 Domain Reload Profiling:
-	ReloadAssembly (596ms)
-		BeginReloadAssembly (54ms)
+	ReloadAssembly (517ms)
+		BeginReloadAssembly (46ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (469ms)
-			LoadAssemblies (52ms)
+		EndReloadAssembly (409ms)
+			LoadAssemblies (44ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (146ms)
+			SetupTypeCache (125ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (28ms)
-			SetupLoadedEditorAssemblies (196ms)
+			RebuildScriptCaches (27ms)
+			SetupLoadedEditorAssemblies (169ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (4ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (73ms)
-				BeforeProcessingInitializeOnLoad (14ms)
-				ProcessInitializeOnLoadAttributes (77ms)
-				ProcessInitializeOnLoadMethodAttributes (27ms)
+				RefreshPlugins (61ms)
+				BeforeProcessingInitializeOnLoad (12ms)
+				ProcessInitializeOnLoadAttributes (69ms)
+				ProcessInitializeOnLoadMethodAttributes (24ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.009761 seconds.
+Registered in 0.008572 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 73.42 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.06 ms.
+Refreshing native plugins compatible for Editor in 58.42 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.04 ms.
 [XR] OculusXRPlugin: registering subsystems
 [XR] Unable to register display lifecyle provider: [1]
 [XR] Oculus Input lifecycle provider registered.
@@ -98,45 +98,45 @@ UnityEngine.Debug:LogError (object)
 UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
 
 Mono: successfully reloaded assembly
-- Completed reload, in  2.018 seconds
+- Completed reload, in  1.580 seconds
 Domain Reload Profiling:
-	ReloadAssembly (2019ms)
-		BeginReloadAssembly (165ms)
+	ReloadAssembly (1581ms)
+		BeginReloadAssembly (124ms)
 			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (7ms)
+			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (19ms)
-		EndReloadAssembly (1785ms)
-			LoadAssemblies (108ms)
+			CreateAndSetChildDomain (17ms)
+		EndReloadAssembly (1404ms)
+			LoadAssemblies (86ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (394ms)
+			SetupTypeCache (296ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (73ms)
-			SetupLoadedEditorAssemblies (1077ms)
+			RebuildScriptCaches (55ms)
+			SetupLoadedEditorAssemblies (859ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (5ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (74ms)
-				BeforeProcessingInitializeOnLoad (106ms)
-				ProcessInitializeOnLoadAttributes (863ms)
-				ProcessInitializeOnLoadMethodAttributes (23ms)
+				RefreshPlugins (59ms)
+				BeforeProcessingInitializeOnLoad (88ms)
+				ProcessInitializeOnLoadAttributes (684ms)
+				ProcessInitializeOnLoadMethodAttributes (18ms)
 				AfterProcessingInitializeOnLoad (6ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (6ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 1.55 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.08 ms.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.06 seconds
+Refreshing native plugins compatible for Editor in 1.07 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.05 ms.
 Unloading 3447 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 147.0 MB.
-System memory in use after: 147.2 MB.
+System memory in use before: 146.8 MB.
+System memory in use after: 147.0 MB.
 
 Unloading 87 unused Assets to reduce memory usage. Loaded Objects now: 3842.
-Total: 4.053000 ms (FindLiveObjects: 0.336000 ms CreateObjectMapping: 0.173200 ms MarkObjects: 3.445500 ms  DeleteObjects: 0.096700 ms)
+Total: 3.435700 ms (FindLiveObjects: 0.237400 ms CreateObjectMapping: 0.115400 ms MarkObjects: 3.007600 ms  DeleteObjects: 0.074400 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -152,35 +152,43 @@ AssetImportParameters requested are different than current active one (requested
 Received Import Request.
   path: Assets/Resources/Prefabs/ButtonStand.prefab
   artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd7fcef96e84130f7e13968afa0927c07') in 0.119285 seconds 
-  Import took 0.222245 seconds .
+Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'acae9426da9b6bf24ce0e3cc6c174501') in 0.091448 seconds 
+  Import took 0.115211 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 4.215923 seconds.
+  Time since last request: 30.869867 seconds.
   path: Assets/Resources/Prefabs/ButtonStand.prefab
   artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1e4a3dee99d96c4730e0a3ed463b3f2') in 0.012879 seconds 
-  Import took 0.019485 seconds .
+Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5a34eed72ffd22732fa78f272c3ad7eb') in 0.009158 seconds 
+  Import took 0.014235 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 7.720533 seconds.
+  Time since last request: 9.721862 seconds.
   path: Assets/Resources/Prefabs/ButtonStand.prefab
   artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c15b792760680f76e70322acbecb9e9e') in 0.008546 seconds 
-  Import took 0.013206 seconds .
+Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd5f9ca0480ab3e962389a01ea750d4d6') in 0.008842 seconds 
+  Import took 0.030390 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 12.095943 seconds.
+  path: Assets/Resources/Prefabs/ButtonStand.prefab
+  artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e730b0ca845a009d49e4e6320ce9172d') in 0.007882 seconds 
+  Import took 0.024745 seconds .
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 13.22 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.05 ms.
+Refreshing native plugins compatible for Editor in 14.22 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.04 ms.
 Unloading 76 Unused Serialized files (Serialized files now loaded: 0)
 System memory in use before: 80.6 MB.
-System memory in use after: 80.9 MB.
+System memory in use after: 80.8 MB.
 
 Unloading 77 unused Assets to reduce memory usage. Loaded Objects now: 3851.
-Total: 4.747700 ms (FindLiveObjects: 0.323400 ms CreateObjectMapping: 0.142500 ms MarkObjects: 4.245400 ms  DeleteObjects: 0.035600 ms)
+Total: 4.080000 ms (FindLiveObjects: 0.311000 ms CreateObjectMapping: 0.133700 ms MarkObjects: 3.604300 ms  DeleteObjects: 0.030100 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -195,11 +203,11 @@ AssetImportParameters requested are different than current active one (requested
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.010987 seconds.
+Registered in 0.009056 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 1.21 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.07 ms.
+Refreshing native plugins compatible for Editor in 1.14 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.06 ms.
 System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.NullReferenceException: Object reference not set to an instance of an object
   at Unity.XR.Oculus.OculusLoader.AssetPathToAbsolutePath (System.String assetPath) [0x00048] in D:\Documents\5th Year\Spring\CSCI4950\VRMahjongMultiplayer\VRMahjongMultiplayer\VRMultiplayerMahjong\Library\PackageCache\com.unity.xr.oculus@1.11.2\Runtime\OculusLoader.cs:250 
   at Unity.XR.Oculus.OculusLoader.EditorLoadOVRPlugin () [0x0007b] in D:\Documents\5th Year\Spring\CSCI4950\VRMahjongMultiplayer\VRMahjongMultiplayer\VRMultiplayerMahjong\Library\PackageCache\com.unity.xr.oculus@1.11.2\Runtime\OculusLoader.cs:235 
@@ -216,42 +224,42 @@ UnityEngine.Debug:LogError (object)
 UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
 
 Mono: successfully reloaded assembly
-- Completed reload, in  1.315 seconds
+- Completed reload, in  1.231 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1316ms)
-		BeginReloadAssembly (115ms)
+	ReloadAssembly (1231ms)
+		BeginReloadAssembly (125ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (5ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (40ms)
-		EndReloadAssembly (1143ms)
+			CreateAndSetChildDomain (41ms)
+		EndReloadAssembly (1045ms)
 			LoadAssemblies (93ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (358ms)
+			SetupTypeCache (329ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (515ms)
+			RebuildScriptCaches (45ms)
+			SetupLoadedEditorAssemblies (461ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (93ms)
-				ProcessInitializeOnLoadAttributes (393ms)
-				ProcessInitializeOnLoadMethodAttributes (18ms)
+				BeforeProcessingInitializeOnLoad (80ms)
+				ProcessInitializeOnLoadAttributes (353ms)
+				ProcessInitializeOnLoadMethodAttributes (16ms)
 				AfterProcessingInitializeOnLoad (6ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (7ms)
+			AwakeInstancesAfterBackupRestoration (6ms)
 Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 1.24 ms, found 14 plugins.
-Preloading 1 native plugins for Editor in 0.06 ms.
+Refreshing native plugins compatible for Editor in 1.13 ms, found 14 plugins.
+Preloading 1 native plugins for Editor in 0.05 ms.
 Unloading 3398 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 147.4 MB.
-System memory in use after: 147.6 MB.
+System memory in use before: 147.3 MB.
+System memory in use after: 147.5 MB.
 
 Unloading 79 unused Assets to reduce memory usage. Loaded Objects now: 3855.
-Total: 3.979200 ms (FindLiveObjects: 0.278800 ms CreateObjectMapping: 0.153300 ms MarkObjects: 3.505300 ms  DeleteObjects: 0.040700 ms)
+Total: 3.857300 ms (FindLiveObjects: 0.317400 ms CreateObjectMapping: 0.119800 ms MarkObjects: 3.387400 ms  DeleteObjects: 0.032100 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -263,35 +271,4 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Import Request.
-  Time since last request: 261.113072 seconds.
-  path: Assets/Resources/Prefabs/ButtonStand.prefab
-  artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '816bdfda0a6738a510c2038ed87307be') in 0.079758 seconds 
-  Import took 0.084680 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 5.605561 seconds.
-  path: Assets/Resources/Prefabs/ButtonStand.prefab
-  artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c01e58f797cd2c94225219c1a2c86272') in 0.008400 seconds 
-  Import took 0.013058 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 19.681603 seconds.
-  path: Assets/Resources/Prefabs/ButtonStand.prefab
-  artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8ee4dbdcd26ce923a0b6d7cfa20dd834') in 0.009945 seconds 
-  Import took 0.015932 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 9.793532 seconds.
-  path: Assets/Resources/Prefabs/ButtonStand.prefab
-  artifactKey: Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Prefabs/ButtonStand.prefab using Guid(5ca2a2d18356aa54896ea76aa9cdb5e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a1adcbaf79a26a01e52f54c61d3620c4') in 0.009372 seconds 
-  Import took 0.014664 seconds .
-
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
