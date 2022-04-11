@@ -27,6 +27,9 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private int loadedAvatar;
     private GameObject handMeshes;
 
+    private List<Vector3> avatarComponentPositions;
+    private List<Quaternion> avatarComponentRotations;
+
     private MahjongGameManager gameManager;
 
     [SerializeField] private MapTransforms headMapping;
@@ -104,38 +107,34 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                 }
             }
 
+            //update avatar positions here?
+
         }
+
+        //Debug.Log("Update called");
     }
 
     //Used to update the position and rotations of each avatar child.
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        //if (avatar != null) {
+        //TODO: Make list of position and rotation for all avatar components
+        //TODO: Send int of list items and check if the local list has the same amount of items
+        //Debug.Log("OnPhotonSerializeView called");
         if (stream.IsWriting) {
-            foreach (Transform child in GetComponentsInChildren<Transform>()) {
-                if (child != null) {
-                    try {
-                        stream.SendNext(child.position);
-                        stream.SendNext(child.rotation);
-                    } catch (InvalidCastException e) {
-                        Debug.LogError(e + "for " + child.gameObject.name);
-                    }
-                }
-            }
+
         } else if (stream.IsReading) {
-            foreach (Transform child in GetComponentsInChildren<Transform>()) {
-                if (child != null) {
-                    try {
-                        child.position = (Vector3)stream.ReceiveNext();
-                        child.rotation = (Quaternion)stream.ReceiveNext();
-                    } catch (InvalidCastException e) {
-                        Debug.LogError(e + "for " + child.gameObject.name);
-                    }
-                    
-                }
-            }
+
         }
-        //}
+
+        //update avatar transforms here?
     }
+
+    [PunRPC]
+    private void updateAvatarTransforms() {
+
+    }
+
+
+
 
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         if (photonView.IsMine) {
@@ -157,8 +156,8 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData) {
         Debug.Log("Avatar loaded.");
         if (photonView.IsMine) {
-            setAvatarComponents(avatar);
             avatar.transform.parent = gameObject.transform;
+            setAvatarComponents(avatar);
             this.avatar = avatar;
             photonView.RPC("loadAvatarRPC", RpcTarget.OthersBuffered, photonView.OwnerActorNr, avatarURL);
         } else if (!photonView.IsMine && loadedAvatar == photonView.OwnerActorNr) {
@@ -178,6 +177,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     private void setAvatarComponents(GameObject avatar) {
         Transform[] avatarComponents = avatar.GetComponentsInChildren<Transform>();
         foreach (Transform component in avatarComponents) {
+            component.gameObject.AddComponent<PhotonTransformView>();
             if (component.gameObject.name.EndsWith("_EyeLeft") || component.gameObject.name.EndsWith("_EyeRight") ||
         component.gameObject.name.EndsWith("_Glasses") || component.gameObject.name.EndsWith("_Hair") ||
         component.gameObject.name.EndsWith("_Head") || component.gameObject.name.EndsWith("_Teeth") ||

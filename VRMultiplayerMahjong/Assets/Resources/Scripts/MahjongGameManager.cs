@@ -36,6 +36,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         }
 
         foreach (Tile tile in TilePositions.GetComponentsInChildren<Tile>()) {
+            //TODO: Tiles show up in the wrong place for players besides the master client
             tilePositions.Add(new TransformData(tile.gameObject.transform.position, tile.gameObject.transform.rotation));
             Destroy(tile.gameObject);
         }
