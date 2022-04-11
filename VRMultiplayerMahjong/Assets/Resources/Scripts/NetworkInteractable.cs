@@ -16,13 +16,14 @@ public class NetworkInteractable : XRGrabInteractable {
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
-        Debug.Log("RequestOwnership() called");
+        //Debug.Log("RequestOwnership() called, " + gameObject.GetComponent<Tile>().name + " Select Interactor: " + args.interactorObject.transform.name);
         photonView.RequestOwnership();
         base.OnSelectEntered(args);
     }
 
     //tiles highlight when hovered over
     protected override void OnHoverEntered(HoverEnterEventArgs args) {
+        //Debug.Log(gameObject.GetComponent<Tile>().name + " Hover interactor: " + args.interactorObject.transform.name);
         //Debug.Log(gameObject.GetComponent<Tile>().name + " is being hovered over");
         foreach (Material mat in tileMats) {
             //Debug.Log(mat.GetColor("_Color").ToString());

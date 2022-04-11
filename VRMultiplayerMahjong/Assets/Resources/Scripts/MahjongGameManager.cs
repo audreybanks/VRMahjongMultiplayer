@@ -28,16 +28,22 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         shuffling = false;
         tilePositions = new List<TransformData>();
         tiles = new List<GameObject>();
-        //TODO: Fix GameObject.Find
-        TilePositions = GameObject.Find("TilePositions");
+
+        foreach (Transform child in GetComponentsInChildren<Transform>()) {
+            if (child.gameObject.name == "TilePositions") {
+                TilePositions = child.gameObject;
+            }
+        }
+
         foreach (Tile tile in TilePositions.GetComponentsInChildren<Tile>()) {
             tilePositions.Add(new TransformData(tile.gameObject.transform.position, tile.gameObject.transform.rotation));
             Destroy(tile.gameObject);
         }
 
         if (PhotonNetwork.IsMasterClient) {
-            resetButton = PhotonNetwork.InstantiateRoomObject("Prefabs/ResetButton", new Vector3(0.620000005f, 1.35000002f, 1.14999998f), Quaternion.identity);
-            resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = gameObject.GetComponent<MahjongGameManager>();
+            resetButton = PhotonNetwork.InstantiateRoomObject("Prefabs/ButtonStand", new Vector3(0.75f, 0.49400003f, 1.90999997f), Quaternion.identity);
+            resetButton.GetComponentInChildren<PushButton>().onPressed.AddListener(resetTiles);
+            resetButton.transform.parent = transform;
             //After instatiating the reset button as the Master Client, use an rpc to set it for the other clients.
             photonView.RPC("setResetButton", RpcTarget.AllBuffered, resetButton.GetComponent<PhotonView>().ViewID, GetComponent<PhotonView>().ViewID);
         }
@@ -52,7 +58,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
     ///<summary>Randomizes the positons of the tiles</summary>
     private void shuffleTilePositions() {
         for (int i = 0; i < tilePositions.Count - 1; i++) {
-            int randomIndex = UnityEngine.Random.Range(i, tilePositions.Count);
+            int randomIndex = Random.Range(i, tilePositions.Count);
             TransformData temp = tilePositions[i];
             tilePositions[i] = tilePositions[randomIndex];
             tilePositions[randomIndex] = temp;
@@ -70,16 +76,20 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
             // Debug.Log("buildWall() called");
             for (int i = 0; i < 4; i++) {
                 for (int j = (31 * i); j < (31 * i) + 31; j++) {
-                    int tileID = PhotonNetwork.InstantiateRoomObject("Prefabs/Tiles/" + tilePrefabs[j % 31].name, tilePositions[j].position, tilePositions[j].rotation).
-                        GetComponent<PhotonView>().ViewID;
+                    GameObject tile = PhotonNetwork.InstantiateRoomObject("Prefabs/Tiles/" + tilePrefabs[j % 31].name, tilePositions[j].position, 
+                        tilePositions[j].rotation);
+                    tile.transform.parent = TilePositions.transform;
+                    int tileID = tile.GetComponent<PhotonView>().ViewID;
                     photonView.RPC("addTile", RpcTarget.AllBuffered, tileID);
                 }
             }
 
             for (int i = 0; i < 2; i++) {
                 for (int j = 124 + (6 * i); j < 124 + (6 * i) + 6; j++) {
-                    int tileID = PhotonNetwork.InstantiateRoomObject("Prefabs/TilesSpecial/" + tileSpecialPrefabs[(j - 124) % 6].name, tilePositions[j].position, tilePositions[j].rotation).
-                        GetComponent<PhotonView>().ViewID;
+                    GameObject tile = PhotonNetwork.InstantiateRoomObject("Prefabs/TilesSpecial/" + tileSpecialPrefabs[(j - 124) % 6].name, tilePositions[j].position, 
+                        tilePositions[j].rotation);
+                    tile.transform.parent = TilePositions.transform;
+                    int tileID = tile.GetComponent<PhotonView>().ViewID;
                     photonView.RPC("addTile", RpcTarget.AllBuffered, tileID);
                 }
             }
@@ -97,7 +107,6 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
     private void setResetButton(int resetButtonID, int gameManagerID) {
         if (!PhotonNetwork.IsMasterClient) {
             resetButton = PhotonNetwork.GetPhotonView(resetButtonID).gameObject;
-            resetButton.GetComponent<ResetButtonInteractable>().mahjongGameManager = PhotonNetwork.GetPhotonView(gameManagerID).transform.GetComponent<MahjongGameManager>();
         }
     }
 
@@ -119,8 +128,8 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         // Debug.Log("Clicked reset button");
         // Debug.Log("isShuffling: " + shuffling);
         if (PhotonNetwork.IsMasterClient) {
-            previousColor = resetButton.GetComponent<Renderer>().material.color;
-            photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, 0.5f, 0.5f, 0.5f, 1.0f);
+            //Color previousColor = resetButton.GetComponent<Renderer>().material.color;
+            //photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, 0.5f, 0.5f, 0.5f, 1.0f);
 
             //Before shuffling, transfer ownership to the Master Client
             foreach (GameObject tile in tiles) {
@@ -144,7 +153,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
                 tile.GetComponent<PhotonTransformView>().enabled = true;
             }
 
-            photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, previousColor.r, previousColor.g, previousColor.b, 1.0f);
+            //photonView.RPC("changeButtonColor", RpcTarget.AllBuffered, previousColor.r, previousColor.g, previousColor.b, 1.0f);
         }
         shuffling = false;
     }

@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headBodyOffset: {x: 0, y: 0, z: 0}
-  avatarURL: https://d1a370nemizbjq.cloudfront.net/1779178f-9c58-4fb8-beae-fa5227909548.glb
+  avatarURL: https://d1a370nemizbjq.cloudfront.net/ff1e5d2e-bb72-467d-8d34-0a5118a0c783.glb
   headMapping:
     deviceTransform: {fileID: 0}
     networkTransform: {fileID: 0}

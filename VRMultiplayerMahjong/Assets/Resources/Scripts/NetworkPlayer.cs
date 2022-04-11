@@ -66,9 +66,16 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             leftHandDevice = hands[0].gameObject.transform;
             rightHandDevice = hands[1].gameObject.transform;
         } else {
-            leftHandDevice = hands[0].gameObject.transform;
-            rightHandDevice = hands[1].gameObject.transform;
+            leftHandDevice = hands[1].gameObject.transform;
+            rightHandDevice = hands[0].gameObject.transform;
         }
+
+        leftHandDevice.GetComponentInChildren<MeshRenderer>().enabled = false;
+        rightHandDevice.GetComponentInChildren<MeshRenderer>().enabled = false;
+
+        leftHandDevice.GetComponentInChildren<BoxCollider>().enabled = true;
+        rightHandDevice.GetComponentInChildren<BoxCollider>().enabled = true;
+
         gameManager = FindObjectOfType<MahjongGameManager>();
     }
 
@@ -95,7 +102,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                     //Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
                     enableHandRenderer(device.transform.name);
                 }
-
             }
 
         }
