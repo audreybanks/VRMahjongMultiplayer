@@ -122,13 +122,13 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
         shuffling = state;
     }
 
+    //TODO: Reset tiles by reinstantiating them
     ///<summary>Shuffles and resets the tile positions. Can only be activated by the Master Client.</summary>
     public void resetTiles() {
         shuffling = true;
         // Debug.Log("Clicked reset button");
         // Debug.Log("isShuffling: " + shuffling);
 
-        //Before shuffling, transfer ownership to the Master Client
         foreach (GameObject tile in tiles) {
             tile.GetComponent<PhotonView>().RequestOwnership();
             tile.GetComponent<PhotonTransformView>().enabled = false;
@@ -136,7 +136,7 @@ public class MahjongGameManager : MonoBehaviourPunCallbacks, IPunInstantiateMagi
 
         Debug.Log("tile count: " + tiles.Count);
         Debug.Log("tilePositions count: " + tilePositions.Count);
-        //Have the Master Client shuffle the positions and move tiles
+
         shuffleTilePositions();
 
         Debug.Log("tile count: " + tiles.Count);

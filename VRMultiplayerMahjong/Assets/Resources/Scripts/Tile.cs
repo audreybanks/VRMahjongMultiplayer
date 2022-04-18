@@ -26,7 +26,7 @@ public class Tile : MonoBehaviour, IComparable<Tile>, IEquatable<Tile> {
         return this.CompareTo(otherTile) == 0;
     }
 
-    public override bool Equals(System.Object obj) {
+    public override bool Equals(object obj) {
         if (obj == null) {
             return false;
         }

@@ -36,6 +36,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
     [SerializeField] private MapTransforms leftHandMapping;
     [SerializeField] private MapTransforms rightHandMapping;
 
+    private GameObject lastHoveredObject;
 
     ///<summary>Class to map the network Transform and the device Transform</summary>
     [System.Serializable]
@@ -105,6 +106,21 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                     //Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
                     enableHandRenderer(device.transform.name);
                 }
+
+                //Highlight the first interactable being hovered by this player
+                if (device.hasHover) {
+                    if (lastHoveredObject != null) {
+                        unhighlightInteractable(lastHoveredObject);
+                    }
+                    if (lastHoveredObject == null || lastHoveredObject != device.interactablesHovered[0].transform.gameObject) {
+                        lastHoveredObject = device.interactablesHovered[0].transform.gameObject;
+                        highlightInteractable(lastHoveredObject);
+                    }
+                } else {
+                    if (lastHoveredObject != null) {
+                        unhighlightInteractable(lastHoveredObject);
+                    }
+                }
             }
         }
 
@@ -126,7 +142,8 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
                 avatarComponentPositions[i] = avatarComponents[i].position;
                 avatarComponentRotations[i] = avatarComponents[i].rotation;
             }
-            photonView.RPC("updateAvatarTransforms", RpcTarget.Others, avatarComponentPositions, avatarComponentRotations, listCount);
+            photonView.RPC("updateAvatarTransforms", RpcTarget.Others, avatarComponentPositions,
+                avatarComponentRotations, listCount);
         }
     }
 
@@ -223,6 +240,20 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             new Vector3(0.0f, 90.0f, 90.0f));
         rightHandMapping = new MapTransforms(rightHandDevice, rightHand, new Vector3(0.0f, -0.06f, -0.15f),
             new Vector3(0.0f, -90.0f, -90.0f));
+    }
+
+    private void highlightInteractable(GameObject interactable) {
+        Material[] tileMats = interactable.GetComponent<Renderer>().materials;
+        foreach (Material mat in tileMats) {
+            mat.SetColor("_Color", mat.GetColor("_Color") + new Color(0.3f, 0.3f, 0.3f, 1.0f));
+        }
+    }
+
+    private void unhighlightInteractable(GameObject interactable) {
+        Material[] tileMats = interactable.GetComponent<Renderer>().materials;
+        foreach (Material mat in tileMats) {
+            mat.SetColor("_Color", mat.GetColor("_Color") - new Color(0.3f, 0.3f, 0.3f, 1.0f));
+        }
     }
 
 

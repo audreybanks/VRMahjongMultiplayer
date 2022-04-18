@@ -34,20 +34,20 @@ public class NetworkInteractable : XRGrabInteractable {
         base.OnSelectExited(args);
     }
 
-    //tiles highlight when hovered over
-    protected override void OnHoverEntered(HoverEnterEventArgs args) {
-        foreach (Material mat in tileMats) {
-            //Debug.Log(mat.GetColor("_Color").ToString());
-            mat.SetColor("_Color", mat.GetColor("_Color") + new Color(0.3f, 0.3f, 0.3f, 1.0f));
-        }
-        base.OnHoverEntered(args);
-    }
+    ////tiles highlight when hovered over
+    //protected override void OnHoverEntered(HoverEnterEventArgs args) {
+    //    foreach (Material mat in tileMats) {
+    //        //Debug.Log(mat.GetColor("_Color").ToString());
+    //        mat.SetColor("_Color", mat.GetColor("_Color") + new Color(0.3f, 0.3f, 0.3f, 1.0f));
+    //    }
+    //    base.OnHoverEntered(args);
+    //}
 
-    protected override void OnHoverExited(HoverExitEventArgs args) {
-        foreach (Material mat in tileMats) {
-            //Debug.Log(mat.GetColor("_Color").ToString());
-            mat.SetColor("_Color", mat.GetColor("_Color") - new Color(0.3f, 0.3f, 0.3f, 1.0f));
-        }
-        base.OnHoverExited(args);
-    }
+    //protected override void OnHoverExited(HoverExitEventArgs args) {
+    //    foreach (Material mat in tileMats) {
+    //        //Debug.Log(mat.GetColor("_Color").ToString());
+    //        mat.SetColor("_Color", mat.GetColor("_Color") - new Color(0.3f, 0.3f, 0.3f, 1.0f));
+    //    }
+    //    base.OnHoverExited(args);
+    //}
 }
