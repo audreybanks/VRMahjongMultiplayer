@@ -11,17 +11,14 @@ public class PushButton : MonoBehaviour {
     private bool isPressed;
     private Vector3 startPosition;
     private ConfigurableJoint configurableJoint;
-    
 
     public UnityEvent onPressed;
     public UnityEvent onReleased;
 
     // Start is called before the first frame update
     void Start() {
-
         startPosition = transform.localPosition;
         configurableJoint = GetComponent<ConfigurableJoint>();
-
     }
 
     // Update is called once per frame

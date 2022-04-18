@@ -8,14 +8,13 @@ using Photon.Realtime;
 public class NetworkManager : MonoBehaviourPunCallbacks {
 
     private GameObject playerPrefab;
-    private GameObject gameManager;
     public GameObject plane;
     public GameObject startButton;
 
     void Start() {
         plane.SetActive(false);
         //For testing, remove later
-        connectToServer();
+        //connectToServer();
     }
 
     public void connectToServer() {
@@ -40,7 +39,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         plane.SetActive(true);
         Debug.Log("Joined Room.");
         playerPrefab = PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
-        gameManager = PhotonNetwork.InstantiateRoomObject("Prefabs/MahjongGame", new Vector3(0.0199999996f, 0.90200001f, 1.89999998f), 
+        PhotonNetwork.InstantiateRoomObject("Prefabs/MahjongGame", new Vector3(0.0199999996f, 0.90200001f, 1.89999998f), 
             transform.rotation);
     }
 
