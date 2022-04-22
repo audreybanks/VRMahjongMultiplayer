@@ -10,15 +10,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     private GameObject playerPrefab;
     public GameObject plane;
     public GameObject startButton;
+    public GameObject connectingCanvas;
 
     void Start() {
         plane.SetActive(false);
+        connectingCanvas.SetActive(false);
         //For testing, remove later
         connectToServer();
     }
 
     public void connectToServer() {
         startButton.SetActive(false);
+        connectingCanvas.SetActive(true);
         Debug.Log("Connecting...");
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -37,6 +40,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
         plane.SetActive(true);
+        connectingCanvas.SetActive(false);
         Debug.Log("Joined Room.");
         playerPrefab = PhotonNetwork.Instantiate("Prefabs/NetworkPlayer", transform.position, transform.rotation);
         PhotonNetwork.InstantiateRoomObject("Prefabs/MahjongGame", new Vector3(0.0199999996f, 0.90200001f, 1.89999998f), 

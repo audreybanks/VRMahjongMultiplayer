@@ -109,17 +109,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
                 //Highlight the first interactable being hovered by this player
                 if (device.hasHover) {
-                    if (lastHoveredObject != null) {
-                        unhighlightInteractable(lastHoveredObject);
-                    }
-                    if (lastHoveredObject == null || lastHoveredObject != device.interactablesHovered[0].transform.gameObject) {
-                        lastHoveredObject = device.interactablesHovered[0].transform.gameObject;
-                        highlightInteractable(lastHoveredObject);
-                    }
-                } else {
-                    if (lastHoveredObject != null) {
-                        unhighlightInteractable(lastHoveredObject);
-                    }
+                    highlightInteractable(device);
                 }
             }
         }
@@ -242,8 +232,18 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             new Vector3(0.0f, -90.0f, -90.0f));
     }
 
-    private void highlightInteractable(GameObject interactable) {
-        Material[] tileMats = interactable.GetComponent<Renderer>().materials;
+    private void highlightInteractable(XRDirectInteractor device) {
+
+        if (lastHoveredObject != null) {
+            Material[] lastHoverMats = lastHoveredObject.GetComponent<Renderer>().materials;
+            foreach (Material mat in lastHoverMats) {
+                mat.SetColor("_Color", mat.GetColor("_Color") - new Color(0.3f, 0.3f, 0.3f, 1.0f));
+            }
+        }
+
+        lastHoveredObject = device.interactablesHovered[0].transform.gameObject;
+
+        Material[] tileMats = lastHoveredObject.GetComponent<Renderer>().materials;
         foreach (Material mat in tileMats) {
             mat.SetColor("_Color", mat.GetColor("_Color") + new Color(0.3f, 0.3f, 0.3f, 1.0f));
         }
