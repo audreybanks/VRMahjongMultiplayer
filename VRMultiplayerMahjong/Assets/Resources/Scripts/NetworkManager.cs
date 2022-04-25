@@ -16,7 +16,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         plane.SetActive(false);
         connectingCanvas.SetActive(false);
         //For testing, remove later
-        connectToServer();
+        //connectToServer();
     }
 
     public void connectToServer() {

@@ -38,6 +38,13 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
 
     private GameObject lastHoveredObject;
 
+    private InputDevice leftInput;
+    private InputDevice rightInput;
+    private GameObject locomotonManager;
+
+    private Transform leftAttachPoint;
+    private Transform rightAttachPoint;
+
     ///<summary>Class to map the network Transform and the device Transform</summary>
     [System.Serializable]
     private class MapTransforms {
@@ -81,6 +88,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
         rightHandDevice.GetComponentInChildren<BoxCollider>().enabled = true;
 
         gameManager = FindObjectOfType<MahjongGameManager>();
+        locomotonManager = FindObjectOfType<LocomotionSystem>().gameObject;
+
+        leftInput = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        rightInput = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
     }
 
     // Update is called once per frame
@@ -98,23 +109,79 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, 
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), "RightGrip");
             updateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), "LeftGrip");
 
+            Vector2 leftJoystick;
+            leftInput.TryGetFeatureValue(CommonUsages.primary2DAxis, out leftJoystick);
+
+            Vector2 rightJoystick;
+            rightInput.TryGetFeatureValue(CommonUsages.primary2DAxis, out rightJoystick);
+
+            
+            foreach (Transform transform in rig.GetComponentsInChildren<Transform>()) {
+                if (transform.name == "LeftHandAttachPoint") {
+                    leftAttachPoint = transform;
+                } else if (transform.name == "RightHandAttachPoint") {
+                    rightAttachPoint = transform;
+                }
+            }
+
             foreach (XRDirectInteractor device in rig.GetComponentsInChildren<XRDirectInteractor>()) {
                 if (device.hasSelection) {
+                    locomotonManager.GetComponent<ContinuousTurnProviderBase>().enabled = false;
                     //Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
+                    if (device.transform.name == "RightHand Controller") {
+                        rotateInteractable(device, rightJoystick, rightAttachPoint);
+                    } else {
+                        rotateInteractable(device, leftJoystick, leftAttachPoint);
+                    }
                     disableHandRenderer(device.transform.name);
-                } else if (!device.hasSelection) {
+                } else {
                     //Debug.Log(device.transform.name + " hasSelection: " + device.hasSelection);
+                    locomotonManager.GetComponent<ContinuousTurnProviderBase>().enabled = true;
                     enableHandRenderer(device.transform.name);
                 }
 
                 //Highlight the first interactable being hovered by this player
                 if (device.hasHover) {
                     highlightInteractable(device);
+                } else if (lastHoveredObject != null) {
+                    unhighlightInteractable(lastHoveredObject);
+                    lastHoveredObject = null;
                 }
             }
         }
 
         //Debug.Log("Update called for Player " + photonView.OwnerActorNr);
+    }
+
+    private void rotateInteractable(XRDirectInteractor interactor, Vector2 joystickInput, Transform attachPoint) {
+        Debug.Log("interactable: " + interactor.interactablesSelected[0].transform.name);
+        Debug.Log("interactable rotation: " + interactor.interactablesSelected[0].transform.rotation);
+
+        GameObject interactable = interactor.interactablesSelected[0].transform.gameObject;
+
+        if (joystickInput[0] < -0.8 && joystickInput[1] < -0.8) {
+            interactable.transform.Rotate(0, -5, 0);
+            attachPoint.transform.Rotate(0, -5, 0);
+        } else if (joystickInput[0] > 0.8 && joystickInput[1] > 0.8) {
+            interactable.transform.Rotate(0, 5, 0);
+            attachPoint.transform.Rotate(0, 5, 0);
+        }
+
+        if (joystickInput[0] < -0.8) {
+            interactable.transform.Rotate(0, 0, -5);
+            attachPoint.transform.Rotate(0, 0, -5);
+        } else if (joystickInput[0] > 0.8) {
+            interactable.transform.Rotate(0, 0, 5);
+            attachPoint.transform.Rotate(0, 0, 5);
+        }
+
+        if (joystickInput[1] < -0.8) {
+            interactable.transform.Rotate(5, 0, 0);
+            attachPoint.transform.Rotate(5, 0, 0);
+        } else if (joystickInput[1] > 0.8) {
+            interactable.transform.Rotate(-5, 0, 0);
+            attachPoint.transform.Rotate(-5, 0, 0);
+        }
     }
 
     //Used to update the position and rotations of each avatar child.

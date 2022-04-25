@@ -647,7 +647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a5df2202a8b96488c744be3bd0c33e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Timeout: 10
+  m_Timeout: 7.47
   m_XROrigin: {fileID: 0}
 --- !u!4 &1446311605
 Transform:
